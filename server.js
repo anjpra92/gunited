@@ -3,10 +3,11 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
+var config = require('config.json');
 const mongoose = require('mongoose');
 
 //Connect to mongodb 
-mongoose.connect('mongodb://localhost/gunited');
+mongoose.connect(config.connectionString);
 var db = mongoose.connection;
 
 //To require the model of the user details
@@ -51,9 +52,9 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
-const server = http.createServer(app);
+// const server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-server.listen(port, () => console.log(`API running on localhost:${port}`));
+var server = app.listen(port, () => console.log(`API running on localhost:${port}`));
