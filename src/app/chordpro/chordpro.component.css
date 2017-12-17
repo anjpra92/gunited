@@ -1,0 +1,367 @@
+/*:host ::ng-deep p  { 
+    line-height:1em; 
+    margin-bottom:1.1em;  
+    font-family: Arial;
+} 
+:host ::ng-deep span {
+    position: relative;
+    top: -1em;
+    display:inline-block; 
+    width: 0;
+    overflow:visible; 
+    color:purple;
+    font-weight:bold;
+    font-family: Arial;
+    text-decoration: none;
+    } */
+.verse{
+    line-height:1em; 
+    margin-bottom:1.1em;  
+    /*font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;*/
+}
+.row {
+  display: flex; /* equal height of the children */
+}
+
+.col {
+  flex: 1; /* additionally, equal width */
+  padding: 1em;
+  border: solid;
+}
+.chord{
+    position: relative;
+    top: -1em;
+    display:inline-block; 
+    width: 0;
+    overflow:visible; 
+    color:purple;
+    font-weight:bold;
+    text-decoration: none;
+}
+section{
+      background-color: black;
+      height: 100%;
+      position: relative;
+      top: 0;
+      left: 0;
+      width: 100%;
+}
+.chorus{
+  border-left: thick solid darkblue;
+}
+.versecls:before{
+    content: "Verse:";
+    font-family: cursive;
+    font-weight:bold;
+    font-style:italic;
+}
+.tab
+{
+  font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+  /*margin-bottom: 10px;
+  overflow: auto;
+  width: auto;
+  padding: 5px;
+  background-color: #eee;
+  width: 650px;
+  padding-bottom: 20px;
+  max-height: 600px;*/
+}
+#cmnt_box
+{
+    width: 320px;
+    padding: 10px;
+    border: 5px solid darkviolet;
+    margin: 0;
+}
+.chorus_bg
+{
+    display: inline;
+    background-color: lightblue;
+    font-weight:bold;
+    font-style:italic;
+    color: black;
+}
+.centercls
+{
+    text-align:center;
+}
+.cmtcls
+{
+    text-align:center;
+    background-color:lightgrey;
+}
+acidjs-xchord li::before,
+acidjs-xchord .acidjs-xchord-empty::after,
+acidjs-xchord .acidjs-xchord-muted::after,
+acidjs-xchord li:last-child b::before,
+acidjs-xchord li:nth-child(12) b:first-child span::after,
+acidjs-xchord .acidjs-xchord-fret-odd li:nth-child(2n+1) b:first-child span::after,
+acidjs-xchord .acidjs-xchord-fret-even li:nth-child(2n+2) b:first-child span::after
+{
+    position: absolute;
+    /*position: relative;*/
+}
+
+acidjs-xchord,
+acidjs-xchord *,
+acidjs-xchord::before,
+acidjs-xchord::after,
+acidjs-xchord *::before,
+acidjs-xchord *::after
+{
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box; 
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+acidjs-xchord h3,
+acidjs-xchord .acidjs-xchord-empty::after,
+acidjs-xchord .acidjs-xchord-pressed::after,
+acidjs-xchord .acidjs-xchord-muted::after,
+acidjs-xchord li:nth-child(2n+1) b:first-child span::after
+{
+    font-size: 1em;
+    line-height: 1em;
+}
+
+acidjs-xchord b,
+acidjs-xchord li,
+acidjs-xchord li:last-child b::before
+{
+    width: 100%;
+}
+
+/*acidjs-xchord a
+{
+    visibility: hidden;
+}*/
+acidjs-xchord p,
+acidjs-xchord h3,
+acidjs-xchord li:last-child b::before
+{
+    text-align: center;
+}
+
+acidjs-xchord .acidjs-xchord-fret-odd li:nth-child(2n+1) b:first-child span::after,
+acidjs-xchord .acidjs-xchord-fret-even li:nth-child(2n+2) b:first-child span::after,
+acidjs-xchord li:nth-child(12) b:first-child span::after
+{
+    content: "\25cf";
+    left: 50%;
+    margin: -.5em 0 0 -.3em;
+    color: #ccc;
+}
+
+acidjs-xchord:empty,
+acidjs-xchord *:not(span):empty
+{
+    display: none;
+}
+
+acidjs-xchord,
+acidjs-xchord b
+{
+    border: solid 1px #000;
+}
+
+acidjs-xchord b,
+acidjs-xchord li b:last-child
+{
+    border-bottom: 0;
+}
+
+acidjs-xchord
+{
+    vertical-align: top;
+    margin: .1em;
+    /*margin: 0 auto;*/
+    display: inline-block;
+    width: 10em;
+    padding: 0 1.5em 1.5em;
+    font: normal 1em/1em Garamond, Georgia, "Times New Roman", Serif;
+    cursor: default;
+    color: #000;
+    background: #fff;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    /*width: 50%;*/
+    /*//margin: 0 auto;*/
+}
+
+acidjs-xchord a
+{
+    /*display: block;
+    color: #666;
+    text-decoration: none;
+    font: normal .6em Helvetica, Arial, Sans-serif;*/
+    visibility: hidden;
+}
+
+acidjs-xchord p
+{
+    padding: 1.75em 0 0;
+    font-size: .8em;
+    font-style: italic;
+}
+
+acidjs-xchord h3
+{
+    padding: .5em 0;
+}
+
+acidjs-xchord li
+{
+    display: table;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+acidjs-xchord li b:last-child
+{
+    border-top: 0;
+    border-right: 0;
+    width: 0;
+}
+
+acidjs-xchord li:last-child b::before
+{
+    content: attr(data-key);
+    bottom: -1em;
+    margin: 0 0 0 -50%;
+    text-transform: uppercase;
+    font-size: .75em;
+    line-height: .75em;
+}
+
+acidjs-xchord li::before
+{
+    counter-increment: fret;
+    content: counter(fret, upper-roman)".";
+    margin: .6em 0 0 -2.2em;
+    font-size: .6em;
+}
+
+acidjs-xchord b
+{
+    display: table-cell;
+    vertical-align: middle;
+    height: 2em;
+    font-weight: normal;
+}
+
+acidjs-xchord li:last-child
+{
+    border-bottom: solid 1px #666;
+}
+
+acidjs-xchord div
+{
+    position: relative;
+    counter-reset: fret 0;
+}
+
+acidjs-xchord li:nth-child(12) b:first-child span::after
+{
+    color: #333;
+}
+
+acidjs-xchord li:nth-child(11) b:first-child span::after
+{
+    visibility: hidden;
+}
+
+acidjs-xchord .acidjs-xchord-pressed::after
+{
+    content: "\25cf";
+    margin: 0 0 0 -.3em;
+}
+
+acidjs-xchord .acidjs-xchord-0::after
+{
+    margin: 0 0 0 -.3em;
+}
+
+acidjs-xchord .acidjs-xchord-1::after
+{
+    content: "\2776";
+    margin: 0 0 0 -.3em;
+}
+acidjs-xchord .acidjs-xchord-2::after
+{
+    content: "\2777";
+    margin: 0 0 0 -.3em;
+}
+acidjs-xchord .acidjs-xchord-3::after
+{
+    content: "\2778";
+    margin: 0 0 0 -.3em;
+}
+acidjs-xchord .acidjs-xchord-4::after
+{
+    content: "\2779";
+    margin: 0 0 0 -.3em;
+}
+
+acidjs-xchord .acidjs-xchord-empty::after
+{
+    content: "\25c9";
+    margin: -1.5em 0 0 -.4em;
+}
+
+acidjs-xchord .acidjs-xchord-muted::after
+{
+    content: "\2718";
+    margin: -1.5em 0 0 -.5em;
+}
+
+@media print
+{
+    acidjs-xchord
+    {
+        border: 0;
+    }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) 
+{ 
+    acidjs-xchord .acidjs-xchord-muted::after
+    {
+        margin: -1.4em 0 0 -.3em;
+    }
+}
+ins img
+{
+    height: 30%;
+    width:30%;
+}
+.inner1{
+text-align:center;
+}
+.buttonContainer
+{
+    text-align:center;
+}
+button
+{
+    margin:auto;
+}
+.checkboxcls{
+display: inline;
+}
+.center {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+pre{
+    visibility: hidden;
+}
+.hidden{ display: none; }
+.listgrp
+{
+    width :40%;
+}

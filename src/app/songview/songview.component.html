@@ -1,0 +1,142 @@
+<mat-sidenav-container id="mainCont" fullscreen (window:resize)="onWindowResize($event)">
+  <mat-sidenav #sidenav mode="over" class="app-sidenav">
+    <!--<mat-toolbar color="primary">Song Viewer-->
+      <!--<span class="toolbar-filler"></span>-->
+      <button mat-icon-button (click)="sidenav.toggle()" class="mat-icon-button sidenav-toggle-button" [hidden]="!sidenav.opened">
+        <mat-icon aria-label="Menu" class="material-icons">close</mat-icon>
+      </button>
+    <!--</mat-toolbar>-->
+    <mat-nav-list>
+      <a mat-list-item class="sidenav-link" (click)="sidenav.toggle()">
+        <input type="checkbox" id="fsCheck" (change)="handleClick()"/>
+        <span>&nbsp;</span>
+        <label for="fsCheck" *ngIf="!showImgs"><strong><i>Show Chord Diagrams</i></strong></label>
+        <label for="fsCheck" *ngIf="showImgs"><strong><i>Hide Chord Diagrams</i></strong></label>
+      </a>
+       <a mat-list-item class="sidenav-link" (click)="sidenav.toggle()">
+        <input type="checkbox" id="hsCheck" (change)="handleHclick()"/>
+        <span>&nbsp;</span>
+        <label for="hsCheck" *ngIf="!hoverImgs"><strong><i>Activate Hover</i></strong></label>
+        <label for="hsCheck" *ngIf="hoverImgs"><strong><i>Deactivate Hover</i></strong></label>
+      </a>
+      <a mat-list-item  class="sidenav-link" (click)="sidenav.toggle()">
+          <button mat-raised-button (click)="navigateBack()">Go Back!</button>
+      </a>
+      <a mat-list-item  class="sidenav-link" (click)="sidenav.toggle()">
+          <button mat-raised-button id="vfullscreen" color="primary" (click)="setCancelfs()">Go Full Screen!</button>
+          <!--<button mat-raised-button *ngIf="!cancelFS" id="vfullscreen" color="primary" (click)="setCancelfs()">Go Full Screen!</button>-->
+      </a>
+      <!--Less frequently used options-->
+      <a mat-list-item  class="sidenav-link" (click)="sidenav.toggle()">
+          <button mat-raised-button data-toggle="modal" data-target="#myModal">Format Settings</button>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+   <div id="leftid">
+    <button style="float:left" mat-icon-button (click)="sidenav.toggle()" class="mat-icon-button sidenav-toggle-button" [hidden]="sidenav.opened">
+            <mat-icon aria-label="Menu" class="material-icons">menu</mat-icon>
+    </button>
+    <span>&nbsp;</span>
+    <span>&nbsp;</span>
+    <div style="float:left" *ngIf="!showImgs" class="button-row">
+        <button mat-mini-fab class="mat-mini-fab">
+        <mat-icon aria-label="Pitch Increase" class="material-icons" (click)="increasePitch()">trending_up</mat-icon>
+        </button>
+        <button mat-mini-fab class="mat-mini-fab">
+        <mat-icon aria-label="Pitch Decrease" class="material-icons" (click)="decreasePitch()">trending_down</mat-icon>
+        </button>
+        <button mat-mini-fab class="mat-mini-fab">
+        <mat-icon aria-label="Reset" class="material-icons" (click)="resetPitch()">settings_backup_restore</mat-icon>
+        </button>
+    </div>
+    <div style="clear:both"></div>
+    <div flex layout="row">
+      <mat-card-content flex>
+        <div #songContainer>
+          <div #verseHtml class="misCe"></div>
+          <div #chordImg class="chordDig hidden">
+            <h2 style="text-align: center"><b>Chord Diagrams</b></h2>
+            <div #acidDiv [innerHTML]="acidjsHTML"></div>
+            <div #chordHtml></div>
+          </div>
+          <br>
+       </div>
+      </mat-card-content>
+    </div>
+   <br>
+</div>
+</mat-sidenav-container>
+ <!--MODAL FOR FORMAT SETTINGS-->
+ <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title text-info">Format Settings</h4>
+        </div>
+       <div class="modal-body">
+             <!--Format Options Begin-->
+        <label for="BgVerse">Set BG Colour</label>
+        <input type="color"  [(ngModel)]="cusForm.bgVerse" id="bgVerse" name="bgVerse" (change)="setFormat()">
+        <br>
+      <label for="TextFont">Text Font:</label>
+      <select (change)="setFormat()" name="textFont" style="color:black;" [(ngModel)]="cusForm.textFont">
+              <option (click)="sidenav.toggle()" *ngFor="let tfont of tFonts" style="color:black;" [value]="tfont">{{tfont}}</option>
+      </select>
+      <br>
+        <label for="ChordFont">Chord Font:</label>
+        <select (change)="setFormat()" name="chordFont" style="color:black;" [(ngModel)]="cusForm.chordFont">
+            <option (click)="sidenav.toggle()" *ngFor="let cfont of cFonts" style="color:black;" [value]="cfont">{{cfont}}</option>
+        </select>
+      <br>
+        <label for="TabFont">Tab Font:</label>
+        <select (change)="setFormat()" name="tabFont" style="color:black;" [(ngModel)]="cusForm.tabFont">
+              <option (click)="sidenav.toggle()" *ngFor="let tabfont of tabFonts" style="color:black;" [value]="tabfont">{{tabfont}}</option>
+        </select>
+      <br>
+        <label for="Textcolor">Text Colour:</label>
+        <input type="color" [(ngModel)]="cusForm.textColor" style="color:black;" id="tcolor" name="Textcolor" (change)="setFormat()">
+      <br>
+        <label for="Chordcolor">Chord Colour:</label>
+        <input type="color" [(ngModel)]="cusForm.chordColor" id="ccolor" name="Chordcolor" (change)="setFormat()">
+      <br>
+        <label for="Tabcolor">Tab Colour:</label>
+        <input type="color" [(ngModel)]="cusForm.tabColor" id="tabcolor" name="Tabcolor" (change)="setFormat()">
+      <br>
+        <label for="TextSize">Text Size:</label>
+        <select (change)="setFormat()" name="textSize" style="color:black;" [(ngModel)]="cusForm.textSize">
+          <option (click)="sidenav.toggle()" *ngFor="let tsize of sizes" style="color:black;" [value]="tsize">{{tsize}}</option>
+        </select>
+      <br>
+        <label for="ChordSize">Chord Size:</label>
+        <select (change)="setFormat()" name="chordSize" style="color:black;" [(ngModel)]="cusForm.chordSize">
+              <option (click)="sidenav.toggle()" *ngFor="let csize of sizes" style="color:black;" [value]="csize">{{csize}}</option>
+        </select>
+      <br>
+        <label for="TabSize">Tab Size:</label>
+        <select (change)="setFormat()" name="tabSize" style="color:black;" [(ngModel)]="cusForm.tabSize">
+              <option (click)="sidenav.toggle()" *ngFor="let tabsize of sizes" style="color:black;" [value]="tabsize">{{tabsize}}</option>
+        </select>
+      <br>
+        <label for="MetaSize">Meta Directive Size:</label>
+        <select (change)="setFormat()" name="metaSize" style="color:black;" [(ngModel)]="cusForm.metaSize">
+              <option (click)="sidenav.toggle()" *ngFor="let msize of sizes" style="color:black;" [value]="msize">{{msize}}</option>
+        </select>
+      <br>
+        <label for="MetaFont">Meta Font:</label>
+        <select (change)="setFormat()" name="metaFont" style="color:black;" [(ngModel)]="cusForm.metaFont">
+         <option (click)="sidenav.toggle()" *ngFor="let mfont of tFonts" style="color:black;" [value]="mfont">{{mfont}}</option>
+        </select>
+      <br>
+        <label for="Metacolor">Directive Colour:</label>
+        <input type="color" [(ngModel)]="cusForm.metaColor" id="metacolor" name="Metacolor" (change)="setFormat()">
+      <br>
+      </div>
+        <div class="modal-footer">
+          <button type="submit" style="color:black" class="btn btn-success" data-dismiss="modal">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+ <!--End of MODAL-->
+

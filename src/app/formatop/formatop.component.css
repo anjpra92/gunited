@@ -1,0 +1,15 @@
+#custBg
+{
+    width : 65%;
+    display: inline-block;
+
+}
+td
+{
+    padding:0 15px 0 15px;
+}
+.center {
+    margin: auto;
+    width: 65%;
+    padding: 10px;
+}

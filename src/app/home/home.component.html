@@ -1,0 +1,99 @@
+<!--Carousel-->
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="item active">
+          <!--<img src="https://gunited-app-aprabha7.c9users.io/api/uploads/serverpic/guitar1.jpg" style="width:100%; height: 400px;" alt="Register yourself for an account today!">-->
+          <img [src]="guitar1URL" style="width:100%; height: 400px;" alt="Register yourself for an account today!">
+            <div class="carousel-caption text-left">
+              <h1>Welcome to Guitarists United!</h1>
+              <p>Every guitarist be it a beginner or a professionel inherently has something unique about their playing. They just have to identify what makes them different and develop it. Guitarists United is here to help you with it!</p>
+              <p><a class="btn btn-lg btn-primary" href="#" (click)="auth.login()" *ngIf="!auth.authenticated()" role="button" >Create your account Today!</a></p>
+          </div>
+        </div>
+        <div class="item">
+          <img [src]="guitar2URL" style="width:100%; height: 400px;" alt="Second slide">
+            <div class="carousel-caption">
+              <h1>Share your Songsheets with Your friends!</h1>
+              <p>Create your own Playlists with your favourite songs and share your unique creations with your own unique clique of friends!</p>
+              <!--CreatePlayList component-->
+              <p><a class="btn btn-lg btn-primary" (click)="callSongBook()" *ngIf="auth.authenticated()" role="button">Get Started!</a></p>
+              <p><a class="btn btn-lg btn-primary" href="#" (click)="auth.login()" *ngIf="!auth.authenticated()" role="button">Click here!</a></p>
+          </div>
+        </div>
+        <div class="item">
+          <img [src]="guitar3URL" style="width:100%; height: 400px;" alt="Third slide">
+            <div class="carousel-caption text-right">
+              <h1 fontcolor="black">ChordPro For Your Tunes!</h1>
+              <p fontcolor="black">Make use of your free account to convert your favourite tunes written in simple text file format to chord files. You no longer have to write them out patiently, thanks to ChordPro Converter!</p>
+              <p><a class="btn btn-lg btn-primary" (click)="callChordPro()" role="button">Convert My Files!</a></p>
+          </div>
+        </div>
+      </div>
+  <!-- Left and right controls -->
+  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
+<div>
+<!--Alert to Update Profile to find friends-->
+<br>
+<div *ngIf="auth.authenticated() && !auth.userProfile.user_metadata">
+  <div class="alert alert-dismissible alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h4 class="alert-heading">Update your Profile!</h4>
+    <p class="mb-0">Update your Profile Details, so your Friends can find you and add you to their groups! <a [routerLink]="['/profile']" class="alert-link">Click here to update your profile!</a>.</p>
+  </div>
+</div>
+<!-- Display Friends -->
+<hr class="featurette-divider">
+<div *ngIf="!auth.authenticated()" >
+<h2 class="featurette-heading text-primary"><b><i>Our current members!</i></b></h2>
+<hr>
+</div>
+<div>
+  <h2 *ngIf="auth.authenticated()" class="lead"> Find your friends, Add them to your Group and Share Songs!</h2>
+  <label *ngIf="auth.authenticated()" class="search">Find by Name:</label>
+  <input *ngIf="auth.authenticated()" type="text" [(ngModel)]="nameFilter.name" placeholder="Enter Name">
+  <br>
+  <div *ngFor = "let i = index;let user of users| filterBy:nameFilter" [attr.data-index]="i">
+    <div class="row featurette">
+      <div class="col-md-4">
+        <h3 *ngIf="!user.user_metadata.name" class="featurette-heading"><i><span class="text-muted">{{user.name}}</span></i></h3>
+        <h3 *ngIf="user.user_metadata.name" class="featurette-heading"><i><span class="text-muted">{{user.user_metadata.name}}</span></i></h3>
+        <p *ngIf="user.user_metadata.aboutMe" class="text-success"><b>{{user.user_metadata.aboutMe}}</b></p>
+        <button *ngIf="auth.authenticated() && !(auth.userProfile.email == user.email)" class="btn btn-warning btn-sm" style="color:black;font-weight:bold" (click)="addGrpFlg(user.email,i)">Add to Group</button> 
+        <span>&nbsp;</span>
+        <span>&nbsp;</span>
+        <a *ngIf="auth.authenticated() && !(auth.userProfile.email == user.email)" [routerLink]="['/group']" role="button" class="btn btn-info btn-sm" style="color:black;font-weight:bold">Manage my Groups</a>  
+      </div>
+      <div class="col-md-5">
+        <div  id="{{'gobject-'+[i+1]}}" class="divvcls hidden">
+         <app-frndgrp *ngIf="showGrpComp" #friendgroup [index]="i" [fremail]="fremail" (flgDisableEvent)="flgDisable($event)"></app-frndgrp>
+       </div>
+     </div>
+      <div class="col-md-3">
+        <div id="profilePic" style="text-align: center">
+          <div *ngIf="user.user_metadata">
+            <img *ngIf="user.user_metadata.profilePic" class="featurette-image img-fluid mx-auto img-circle" [src]="user.user_metadata.profilePic" alt="Member Picture">
+            <img *ngIf="!user.user_metadata.profilePic" class="featurette-image img-fluid mx-auto img-circle" src="https://gunited-app-aprabha7.c9users.io/api/uploads/serverpic/default.jpg" alt="Member Picture">
+          </div>
+          <div *ngIf="!user.user_metadata">
+            <img class="featurette-image img-fluid mx-auto img-circle" [src]="defaultURL" alt="Member Picture">
+          </div>
+         </div>
+      </div>
+    </div>
+    <hr class="featurette-divider">
+  </div>
+<!--End of Display Friends-->
+</div>
+
+

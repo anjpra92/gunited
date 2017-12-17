@@ -1,0 +1,60 @@
+<div *ngIf="!testFlg">
+<div class="divset" #optionDiv *ngIf="!opFlg">
+  <h2 class="text-info"><b><i>Choose any one of the options:</i></b></h2>
+  <label><input id="rb1" [(ngModel)]="plOpt" name="opt" value="new" type="radio" (change)="setFlg()">Create New PlayList</label>
+  <span>&nbsp;</span>
+  <span>&nbsp;</span>
+  <label><input id="rb2" [(ngModel)]="plOpt" name="opt" value="old" type="radio" (change)="setFlg()">Add to Existing PlayList</label>
+</div>
+<div class="divset" *ngIf="op1Flg">
+   <h2 class="text-info"><b><i>Create PlayList!</i></b></h2>
+   <label class="search">Enter Name of PlayList:</label>
+   <input type="text" [(ngModel)]="plName" placeholder="Enter Name"><br>
+   <div *ngIf="errFlg" class="alert alert-danger">Name Already Exists, Choose a new Name</div>
+   <label class="search">Songs Selected:</label>
+   <ul>
+     <li *ngFor="let sname of songArr">
+       {{sname}}
+     </li>
+   </ul>
+   <button *ngIf="!disButFlg" type="submit" class="btn btn-warning btn-sm" style="color:black;font-weight:bold" (click)="playListSave()">Create New PlayList!</button> 
+   <span>&nbsp;</span>
+   <span>&nbsp;</span>
+   <button class="btn btn-default btn-sm" style="color:black;font-weight:bold" (click)="disableFlgs()">Cancel</button>   
+</div>
+<div class="divset" *ngIf="op2Flg && !noOldFlg">
+   <h2 class="text-info"><b><i>Add to PlayList</i></b></h2>
+   <label class="search">Choose the PlayList you want to save the selected songs in:</label>
+   <select name="oldPl" style="color:black;" [(ngModel)]="oldPlname" required>
+        <option style="color:black;" *ngFor="let plname of plNameArr" [value]="plname">{{plname}}</option>
+   </select>
+   <br>
+   <label class="search">Songs Selected:</label>
+   <ul>
+     <li *ngFor="let sname of songArr">
+       {{sname}}
+     </li>
+   </ul>
+   <button *ngIf="oldPlname && !disButFlg" type="submit" class="btn btn-warning btn-sm" style="color:black;font-weight:bold" (click)="playListSave()">Add to PlayList!</button>  
+    <span>&nbsp;</span>
+   <span>&nbsp;</span>
+   <button class="btn btn-default btn-sm" style="color:black;font-weight:bold" (click)="disableFlgs()">Cancel</button>   
+</div>
+<div class="divset" *ngIf="op2Flg && noOldFlg">
+  <h2> You have no saved Playlists, Create a new one now! </h2>
+  <label class="search">Enter Name of PlayList:</label>
+   <input type="text" [(ngModel)]="plName" placeholder="Enter Name">
+   <div *ngIf="errFlg" class="alert alert-danger">Name Already Exists, Choose a new Name</div>
+   <br>
+   <label class="search">Songs Selected:</label>
+   <ul>
+     <li *ngFor="let sname of songArr">
+       {{sname}}
+     </li>
+   </ul>
+   <button *ngIf="!disButFlg" type="submit" class="btn btn-warning btn-sm" style="color:black;font-weight:bold" (click)="playListSave()">Create New PlayList!</button>    
+    <span>&nbsp;</span>
+   <span>&nbsp;</span>
+   <button class="btn btn-default btn-sm" style="color:black;font-weight:bold" (click)="disableFlgs()">Cancel</button>   
+</div>
+</div>

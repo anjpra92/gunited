@@ -1,0 +1,57 @@
+<div *ngIf="!succFlg">
+<div class="divset" #optionDiv>
+  <h3 class="text-info"><b><i>Choose any one of the options:</i></b></h3>
+  <label><input id="rb1" [(ngModel)]="gOpt" name="opt" value="newg" type="radio" (change)="setFlg()">Create New Group</label>
+  <span>&nbsp;</span>
+  <span>&nbsp;</span>
+  <label><input id="rb2" [(ngModel)]="gOpt" name="opt" value="oldg" type="radio" (change)="setFlg()">Add to Existing Group</label>
+</div><!--radiobutton menu-->
+
+<div class="divset" *ngIf="op1Flg">
+   <h4 class="text-success"><b><i>Create a New Group</i></b></h4>
+   <label class="search">Enter Name of Group:</label>
+   <input type="text" [(ngModel)]="gName" placeholder="Enter Group Name"><br>
+   <div *ngIf="errFlg" class="alert alert-danger">Name Already Exists, Choose a new Name</div>
+   <br>
+   <button *ngIf="gName" type="submit" class="btn btn-warning btn-sm" style="color:black;font-weight:bold" (click)="addFrndToGrp()">Create Group!</button> 
+   <span>&nbsp;</span>
+   <span>&nbsp;</span>
+   <button class="btn btn-primary btn-sm" style="color:black;font-weight:bold" (click)="setOptFlg()">Back</button>
+   <span>&nbsp;</span>
+   <span>&nbsp;</span>
+   <button class="btn btn-default btn-sm" style="color:black;font-weight:bold" (click)="disableFlgs()">Cancel</button>   
+</div><!-- Option 1-->
+
+<div class="divset" *ngIf="op2Flg && !noOldFlg">
+   <h4 class="text-info"><b><i>Add to Existing Group</i></b></h4>
+   <label class="search">Choose the Group Name:</label>
+   <select name="oldPl" style="color:black;" [(ngModel)]="oldgName" required>
+        <option style="color:black;" *ngFor="let olName of olNameArr" [value]="olName">{{olName}}</option>
+   </select>
+   <div *ngIf="updErrFlg" class="alert alert-danger">The member/playlist already exists in this group, choose another group</div>
+   <br>
+   <button *ngIf="oldgName" type="submit" class="btn btn-warning btn-sm" style="color:black;font-weight:bold" (click)="updateGrp()">Add to Group!</button>  
+   <span>&nbsp;</span>
+   <span>&nbsp;</span>
+   <button class="btn btn-primary btn-sm" style="color:black;font-weight:bold" (click)="setOptFlg()">Back</button>
+   <span>&nbsp;</span>
+   <span>&nbsp;</span>
+   <button class="btn btn-default btn-sm" style="color:black;font-weight:bold" (click)="disableFlgs()">Cancel</button>   
+</div><!--Option 2-->
+
+<div class="divset" *ngIf="op2Flg && noOldFlg">
+  <h4> You have no Groups, Create a new one now! </h4>
+  <label class="search">Enter Name of Group:</label>
+   <input type="text" [(ngModel)]="gName" placeholder="Enter Group Name"><br>
+   <div *ngIf="errFlg" class="alert alert-danger">Name Already Exists, Choose a new Name</div>
+   <br>
+   <button *ngIf="gName" type="submit" class="btn btn-warning btn-sm" style="color:black;font-weight:bold" (click)="addFrndToGrp()">Create Group!</button>  
+   <span>&nbsp;</span>
+   <span>&nbsp;</span>
+   <button class="btn btn-primary btn-sm" style="color:black;font-weight:bold" (click)="setOptFlg()">Back</button>
+   <span>&nbsp;</span>
+   <span>&nbsp;</span>
+   <button class="btn btn-default btn-sm" style="color:black;font-weight:bold" (click)="disableFlgs()">Cancel</button>   
+</div><!--Option 3-->
+
+</div>

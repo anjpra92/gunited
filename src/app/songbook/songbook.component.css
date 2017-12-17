@@ -1,0 +1,77 @@
+#playlist
+{
+    float:left;
+    width:100%;
+}
+#playlistDb
+{
+    width: 500px;
+    float:left;
+}
+#songsDb
+{
+    width:75%;
+}
+.container {
+    position: absolute;
+}
+
+.container2
+{
+    clear: left;
+}
+#checkPL
+{
+    display: inline-block;
+    float:left;
+    position:relative;
+    top:0;
+}
+.left{
+    width: 500px;
+    float:left;
+}
+
+.middle
+{
+    width: 25px;
+    float:left;
+    background-color:white;
+}
+
+.right {
+    display: inline-block;
+    float:left;
+}
+.right:after{
+    content:"";
+    display:block;
+    clear:both;
+}
+#playDb
+{
+    /*background-image: url("http://localhost:3000/api/uploads/serverpic/playlistcompbg.png") ;*/
+    background-color: snow;
+    width: 500px;
+}
+.modal {
+  text-align: center;
+  padding: 0!important;
+}
+
+.modal:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -4px;
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
+    
+

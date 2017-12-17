@@ -1,0 +1,132 @@
+ <div class="container">
+ <div class="left" *ngIf="!noSongSave">
+    <h2 class="featurette-heading"><i><span class="text-muted">Your Saved Songs!</span></i></h2>
+      <label class="search">Search by Song Name:</label>
+      <input type="text" [(ngModel)]="snameFilter.songName" placeholder="Enter Song Name">
+    <table id="songsDb" class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th></th>
+        <th>Song Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let saveSong of savedSongs | filterBy:snameFilter; let i = index" [attr.data-index]="i">
+        <td>{{[i+1]}}</td>
+        <td><input class="chkbox enabled" id="{{ 'cobject-'+[i+1]}}" type="checkbox" name="checkBoxList" value="{{ 'object-'+[i+1]}}" (change)="saveClick($event)"></td>
+        <td><a [routerLink]="['/songview',saveSong._id,'songbook']"><span id="{{ 'object-'+[i+1] }}">{{saveSong.songName}}</span></a></td>
+        <td style="text-align:center"><img [src]="closeURL" title="Delete Song" alt="Delete Song" width="42" height="42" id="{{ 'delobject-'+[i+1] }}" data-toggle="modal" data-target="#mySong" (click)="onConfirmation(saveSong.songName,saveSong._id,i)">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button *ngIf="chkboxFlg" type="submit" class="btn btn-warning btn-sm" style="color:black;font-weight:bold" (click)="onPlayListSave()">Add To PlayList!</button> 
+  <br>
+ </div>
+ <div *ngIf="noSongSave">
+   <h2 class="featurette-heading"><i><span class="text-muted">No Songs Saved! </span></i></h2>
+</div><!--Songdb div-->
+ <br>
+ <span>&nbsp;</span>
+ <span>&nbsp;</span>
+ <div id="middle" class="middle"></div>
+ <div *ngIf="playListFlg" class="right" id="playListComp">
+      <app-playlist #playlist [succ]="succFlg" [plNameArr]="plNameArr" [snameArr]="snameArr" [changeTrigger]="changeTrigger" (plsaveEvent)="plistUpdate($event)" (cancelEvent)="cancelDiv($event)"></app-playlist>
+ </div><!--playlistcomp div-->
+ <br>
+ <div class="container2"></div>
+ <div id="conTainer1" class="container1">
+ <br>
+ <hr>
+ <div *ngIf="!noPlist" id="playlistDb">
+   <h2 class="featurette-heading"><i><span class="text-muted">Your Saved PlayLists!</span></i></h2>
+   <label class="search">Search by PlayList Name:</label>
+   <input type="text" [(ngModel)]="pnameFilter" placeholder="Enter PlayList Name">
+   <br>
+   <br>
+   <div id="playlist">
+      <div *ngFor="let playlist of plNameArr | filterBy:pnameFilter; let i = index" [attr.data-index]="i">
+          <div class="row">
+            <div class="col-sm-6">
+            <span id="{{ 'pobject-'+[i+1] }}"><i>{{[i+1]}} . {{playlist}}</i></span>
+            <!--<span>&nbsp;</span>-->
+            </div>
+            <div class="col-sm-4">
+            <!--<span>&nbsp;</span>-->
+            <img [src]="expandURL" title="Click to Expand" alt="Click to Expand!" width="42" height="42" id="{{'eobject-'+[i+1]}}" (click)="expandList(playlist,i)">
+            <img [src]="closeexpandURL" title="Close" alt="Close" style="display:none" width="42" height="42" id="{{'ccobject-'+[i+1]}}" (click)="closeList(i)">
+            <span>&nbsp;</span>
+            <img [src]="shareURL" title="Share with Group" alt="Share with Group" width="42" height="42" (click)="onShare(playlist)">
+            <span>&nbsp;</span>
+            <img [src]="closeURL" title="Delete PlayList" alt="Delete PlayList" width="42" height="42" id="{{'aplbutton-'+[i+1]}}" data-toggle="modal" data-target="#myModal" (click)="onPlConfirm(i)">
+            <br>
+            <span>&nbsp;</span>
+            </div>
+          </div>
+        <br>
+        <!--TABLE DISPLAY-->
+        <div id="{{'tobject-'+[i+1]}}" class="hidden">
+          <table id="songlist" class="table table-striped table-hover" *ngIf="expFlg">
+            <tr class="active" *ngFor="let plsong of plsongArr">
+              <td style="text-align:center"><a (click)="onNavClick(plsong.songName)">{{plsong.songName}}</a></td>
+              <td style="text-align:center"><img [src]="closeURL" title="Delete Song" alt="Delete Song" width="42" height="42" id="{{ 'asbutton-'+[i+1] }}" (click)="onConfDelete(i)">
+                  <div id="{{ 'asobject-'+[i+1] }}" class="alert alert-dismissible alert-danger hidden">
+                  <button type="button" class="close" data-dismiss="alert" (click)="onSCancel(i)">&times;</button>
+                  <strong>Do you want to Delete This Song?</strong>
+                  <button type="submit" style="color:black" class="btn btn-primary btn-sm" (click)="onDeleteSong(plsong._id)">Yes!</button>
+                   <span>&nbsp;</span>
+                  <button type="submit" style="color:black" class="btn btn-secondary btn-sm" (click)="onSCancel(i)">No!</button>
+                </div>
+              </td>
+            </tr>
+            <br>
+          </table>
+        </div>
+        <!--TABLE DISPLAY-->
+     </div>
+  </div>
+ </div><!--Playlist db div-->
+ <div id="checkPL" *ngIf="showGrpComp" class="divvcls">
+     <app-frndgrp  [songBookcall]="songBookcall" [playListAdd]="playListAdd" (flgDisableEvent)="flgDisableSong($event)"></app-frndgrp>
+  </div>
+ </div><!--container1 div-->
+ <div *ngIf="noPlist">
+   <h2 class="featurette-heading"><i><span class="text-muted">You have no playlists saved!!</span></i></h2>
+ </div>
+ <!--MODAL FOR PLAYLIST DELETE-->
+ <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title text-info">Do you want to delete the playlist?  - {{toggleName}}</h4>
+        </div>
+        <div class="modal-footer" style="text-align:center">
+          <button type="submit" style="color:black" class="btn btn-danger" data-dismiss="modal" (click)="onDeleteList()">Yes!</button>
+           <span>&nbsp;</span>
+          <button type="submit" style="color:black" class="btn btn-success" data-dismiss="modal">No!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+ <!--End of MODAL-->
+  <!--MODAL FOR SONG DELETE-->
+ <div class="modal fade" id="mySong" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title text-info">Do you want to delete the Song?  - {{toggleSName}}</h4>
+        </div>
+        <div class="modal-footer" style="text-align:center">
+          <button type="submit" style="color:black" class="btn btn-danger" data-dismiss="modal" (click)="onDelete()">Yes!</button>
+           <span>&nbsp;</span>
+          <button type="submit" style="color:black" class="btn btn-success" data-dismiss="modal">No!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+ <!--End of MODAL-->
+</div><!--container div-->
+

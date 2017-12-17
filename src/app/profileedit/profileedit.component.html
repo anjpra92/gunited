@@ -1,0 +1,56 @@
+  <div *ngIf="auth.authenticated() && auth.userProfile">
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Edit Profile Details</h3>
+         <div id="profilePic">
+          <div *ngIf="!proPic">
+            <img [src]="auth.userProfile.picture" alt="profile picture" class="img-rounded">
+          </div>
+          <div *ngIf="proPic">
+            <img [src]="auth.userProfile.user_metadata.profilePic" alt="profile picture" class="img-rounded">
+          </div>
+        </div>
+        <form (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="i11">Edit your Name:</label>
+            <input type="text" class="form-control" id="name" [(ngModel)]="name" name="name" placeholder="Enter your name" #n3="ngModel" required>
+            <div [hidden]="n3.valid || n3.pristine" class="alert alert-danger">Please Enter your name!</div>
+
+            <label for="i1">Age:</label>
+            <input type="text" class="form-control" id="age" [(ngModel)]="age" name="age" placeholder="Enter age" #n1="ngModel" min="17" max="110"required>
+            <div [hidden]="n1.valid || n1.pristine" class="alert alert-danger">Age is required</div>
+            <div *ngIf="n1.valid && (n1.value > 110 || n1.value < 17)" class="alert alert-danger">Age should be between 17-110!</div>
+
+            <label for="i2">Gender:</label>
+            <select class="form-control" name="gender" [(ngModel)]="gender">
+                  <option *ngFor="let gen of genders" [value]="gen">{{gen}}</option>
+            </select>
+
+            <label for="i3">Skill Level:</label>
+            <select class="form-control" name="skilllevel" [(ngModel)]="skilllevel" required>
+                  <option *ngFor="let level of levels" [value]="level">{{level}}</option>
+            </select>
+
+            <label for="i4">Gear Used:</label>
+            <input type="text" class="form-control" id="gearUsed" [(ngModel)]="gearUsed" name="gearUsed" placeholder="Enter your Gear Name">
+         
+            <label for="i5">About Me:</label>
+            <textarea class="form-control" rows="3" id="aboutMe" [(ngModel)]="aboutMe" #n2="ngModel" name="aboutMe" placeholder="Enter a few lines about yourself!" required></textarea>
+            <div [hidden]="n2.valid || n2.pristine" class="alert alert-danger">Please Enter few lines about yourself!</div>
+            <br>
+            <br>
+            <input type="file" ng2FileSelect [uploader]="uploader" name="file"/>
+            <br>
+            <button type="button" class="btn btn-success btn-xs" (click)="uploader.uploadAll()">Upload</button>
+             
+           </div>
+           <div *ngIf = "n1.value < 110 && n1.value > 17 && n3.value && n2.value">
+                <button type="submit" class="btn btn-default">Submit</button>
+          </div>
+           <div *ngIf = "n1.value > 110 || n1.value < 17">
+                <label for="i6" class="alert alert-danger">Please correct your errors prior to submitting!</label>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,164 @@
+<div class="container">
+<h3 class="text-success"><b><i>Manage Your Groups</i></b></h3>
+<div *ngIf="noOldFlg" class="alert alert-dismissible alert-danger">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Oh snap! You have not created any groups</strong> <a routerLink="/songbook" class="alert-link">Click here to create some groups</a>
+</div>
+<div *ngIf="!noOldFlg">
+  <table id="grouptable" class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Group Name</th>
+      </tr>
+  </thead>
+  <tr class="table-active" *ngFor="let groupname of groupNameArr; let i = index" [attr.data-index]="i">
+    <td style="color:white">{{[i+1]}}</td>
+    <td style="text-align:center" style="color:white;font-weight:bold"><i>{{groupname}}</i></td>
+    <td>
+      <button id="{{'eobject-'+[i+1]}}" style="color:black;font-weight:bold" class="btn btn-success btn-sm" (click)="onExpandGroup(groupname,i)">View Group Details</button>
+      <button  id="{{'cobject-'+[i+1]}}" style="color:white;font-weight:bold;display:none" class="btn btn-danger btn-sm" (click)="closeList(i)">Close Group Details</button>
+    </td>
+    <td>
+      <img src="https://gunited-app-aprabha7.c9users.io/api/uploads/serverpic/close.png" data-toggle="modal" data-target="#myModal" title="Delete Group" alt="Delete Group" width="42" height="42" id="{{ 'asbutton-'+[i+1] }}" (click)="onConfGroup(i)">
+    </td>
+    <td class="grpDetail" id="{{'tobject-'+[i+1]}}" class="hidden">
+      <div *ngIf="noPlFlg && expFlg" style="width:100%;" >
+        <span class="text-danger" style="float:left;font-weight:bold;width:30%"><b>No PlayList</b></span>
+        <span>&nbsp;</span>
+        <span>&nbsp;</span>
+        <button (click)="navToSongBook()" class="btn btn-warning btn-sm" style="color:black;font-weight:bold">Manage Playlists!</button>
+        <hr>
+      </div>
+      <div style="clear:both"></div>
+      <div *ngIf="!noPlFlg && expFlg">
+        <p class="text-info" style="font-weight:bold"><i><b><u>PlayLists Shared</u></b></i></p>
+        <ol>
+          <li style="color:white;" *ngFor="let plname of playNameArr; let j = index" [attr.data-index]="j">
+             {{plname}} 
+              <span>&nbsp;</span>
+              <span>&nbsp;</span>
+              <span>&nbsp;</span>
+              <img [src]="songDelURL" data-toggle="modal" data-target="#myPlaylist" alt="Delete PlayList" title="Delete PlayList" id="{{'apkbutton-'+[j+1]}}" width="35" height="35" (click)="onPlConfirm(plname,groupname)">
+          </li>
+         </ol>
+        <div style="clear:both"></div>
+       <hr>
+      </div>
+      <div *ngIf="noFrFlg && expFlg" style="width:100%">
+        <span class="text-danger" style="float:left;font-weight:bold;width:30%"><b>No Friends!</b></span>
+        <span>&nbsp;</span>
+        <span>&nbsp;</span>
+        <button (click)="navToHome()" class="btn btn-warning btn-sm" style="color:black;font-weight:bold">Find Friends!</button>
+      </div>
+      <div style="clear:both"></div>
+      <div *ngIf="!noFrFlg && expFlg">
+        <p class="text-info" style="font-weight:bold"><i><b><u>Friends in Group</u></b></i></p>
+        <ol>
+          <li style="color:white;" *ngFor="let fdet of finUserDet; let k = index" [attr.data-index]="k">
+             {{fdet.name}} 
+              <span>&nbsp;</span>
+              <span>&nbsp;</span>
+              <span>&nbsp;</span>
+              <img [src]="removeFriendURL" data-toggle="modal" data-target="#myFriend" alt="Delete Friend" title="Delete Friend" id="{{'asgbutton-'+[k+1]}}" width="35" height="35" (click)="onSgConfirm(fdet.name,fdet.email,groupname,k)">
+          </li>
+        </ol>
+      </div>
+      <div style="clear:both"></div>
+    </td>
+  </tr>
+  <br>
+  <br>
+</table>
+</div>
+<div *ngIf="!noShare">
+<h3 class="text-warning"><b><i>PlayLists Shared By Your Friends!</i></b></h3>
+<table id="sharetable" class="table table-striped table-hover ">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>PlayList</th>
+      </tr>
+  </thead>
+  <tr *ngFor="let playList of playListArr; let i = index" [attr.data-index]="i">
+    <td style="color:white;font-weight:bold">{{[i+1]}}</td>
+    <td style="text-align:center" style="color:white;font-weight:bold"><i>{{playList.plname}}</i></td>
+    <td>
+      <button id="{{'e1object-'+[i+1]}}" style="color:black;font-weight:bold" class="btn btn-success btn-sm" (click)="onExpandPlGroup(playList.authemail,playList.plname,i)">View Songs</button>
+      <button  id="{{'c1object-'+[i+1]}}" style="color:black;font-weight:bold;display:none" class="btn btn-danger btn-sm" (click)="closePlList(i)">Close View</button>
+    </td>
+    <td class="active" id="{{'t1object-'+[i+1]}}" class="hidden">
+      <table id="songlist" *ngIf="exp1Flg">
+          <tr *ngFor="let plsong of plsongArr">
+            <td style="text-align:left;color:black;font-weight:bold;"><a (click)="onNavClick(playList.authemail,plsong.songName)">{{plsong.songName}}</a></td>
+          </tr>
+          <br>
+          <br>
+      </table>
+    </td>
+  </tr>
+  <br>
+  <br>
+</table>
+</div>
+ <!--MODAL FOR GROUP DELETE-->
+ <div class="modal fade" id="myModal" role="dialog">
+    <!--<div class="vertical-alignment-helper">-->
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title text-info">Do you want to delete the group?  - {{toggleGroupName}}</h4>
+        </div>
+        <div class="modal-footer" style="text-align:center">
+          <button type="submit" style="color:black" class="btn btn-danger" data-dismiss="modal" (click)="onDeleteGroup()">Yes!</button>
+           <span>&nbsp;</span>
+          <button type="submit" style="color:black" class="btn btn-success" data-dismiss="modal">No!</button>
+        </div>
+      </div>
+    </div>
+    <!--</div>-->
+  </div>
+ <!--End of MODAL-->
+ <!--MODAL FOR PLAYLIST DELETE-->
+ <div class="modal fade" id="myPlaylist" role="dialog">
+    <!--<div class="vertical-alignment-helper">-->
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title text-info">Delete PlayList '{{togglePlName}}' from Group '{{toggleGrName}}'?</h4>
+        </div>
+        <div class="modal-footer" style="text-align:center">
+          <button type="submit" style="color:black" class="btn btn-danger" data-dismiss="modal" (click)="onRemovePlayList()">Yes!</button>
+           <span>&nbsp;</span>
+          <button type="submit" style="color:black" class="btn btn-success" data-dismiss="modal">No!</button>
+        </div>
+      </div>
+    </div>
+    <!--</div>-->
+  </div>
+ <!--End of MODAL-->
+ <!--MODAL FOR FRIEND DELETE-->
+ <div class="modal fade" id="myFriend" role="dialog">
+    <!--<div class="vertical-alignment-helper">-->
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title text-info">Remove the friend '{{toggleFriendName}}' from Group '{{toggleRgName}}'?</h4>
+        </div>
+        <div class="modal-footer" style="text-align:center">
+          <button type="submit" style="color:black" class="btn btn-danger" data-dismiss="modal" (click)="onRemoveFriend()">Yes!</button>
+           <span>&nbsp;</span>
+          <button type="submit" style="color:black" class="btn btn-success" data-dismiss="modal">No!</button>
+        </div>
+      </div>
+    </div>
+    <!--</div>-->
+  </div>
+ <!--End of MODAL-->
+<div *ngIf="noShare">
+   <h2 class="featurette-heading"><i><span class="text-muted">No PlayLists Shared with you :(</span></i></h2>
+</div>
+</div>

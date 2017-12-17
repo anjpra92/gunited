@@ -1,0 +1,46 @@
+<h1>Profile Details of {{auth.userProfile.nickname}}</h1>
+<div class="alert alert-danger" *ngIf="!auth.authenticated()">Oh Snap ! Please log-in to view your profile</div>
+<div *ngIf="auth.authenticated() && auth.userProfile">
+    <div class="row">
+      <div class="col-md-6">
+        <div id="profilePic">
+          <div *ngIf="!propic">
+            <img [src]="auth.userProfile.picture" alt="profile picture" class="img-rounded">
+          </div>
+          <div *ngIf="propic">
+            <img [src]="auth.userProfile.user_metadata.profilePic" alt="profile picture" class="img-rounded">
+          </div>
+        </div>
+          <p><strong>Name: </strong> {{auth.userProfile.name}}</p>
+          <p><strong>Email : </strong> {{auth.userProfile.email}}</p>
+          <p><strong>nickname : </strong> {{auth.userProfile.nickname}}</p>
+        
+        
+        <div *ngIf="auth.userProfile.user_metadata">
+            <div *ngIf="auth.userProfile.user_metadata.age">
+              <p><strong>Age: </strong> {{auth.userProfile.user_metadata.age}}</p>
+            </div>
+
+            <div *ngIf="auth.userProfile.user_metadata.gender">
+              <p><strong>Gender : </strong> {{auth.userProfile.user_metadata.gender}}</p>
+            </div>
+
+            <div *ngIf="auth.userProfile.user_metadata.skilllevel">
+              <p><strong>Skill Level: </strong> {{auth.userProfile.user_metadata.skilllevel}}</p>
+            </div>
+
+            <div *ngIf="auth.userProfile.user_metadata.gearused">
+              <p><strong>Guitar Gear Used:</strong>{{auth.userProfile.user_metadata.gearused}}</p>
+            </div>
+
+             <div *ngIf="auth.userProfile.user_metadata.aboutme">
+              <p><strong>About Me:</strong>{{auth.userProfile.user_metadata.aboutme}}</p>
+            </div>
+        </div>
+        <div *ngIf="emailCheck">
+            <a class="btn btn-info" routerLink="/editProfile"> Edit My Details! </a>
+        </div>
+        <div class="alert alert-danger" *ngIf="!emailCheck">Oops Sorry! You Can't Edit Your Details unless you verify your email address!</div>
+      </div>
+    </div>
+  </div>

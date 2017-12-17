@@ -1,0 +1,98 @@
+<div id="custBg">
+<div class="panel panel-warning">
+  <div class="panel-heading">
+    <h3 class="panel-title">Customize the Formatting</h3>
+  </div>
+  <div class="panel-body">
+     <table>
+       <tr>
+      <td>
+      <label for="BgVerse">Set Background Colour for Verse:</label>
+      <input type="color"  [(ngModel)]="cusForm.bgVerse" id="bgVerse" name="bgVerse" (change)="test()">
+      </td>
+      <td>
+      <label for="BgDia">Set Background Colour for Chord Diagram:</label>
+      <input type="color"  [(ngModel)]="cusForm.bgDia" id="bgDia" name="bgDia" (change)="test()">
+      </td>
+      </tr>
+      <tr>
+      <td>
+      <label for="TextFont">Set Text Font:</label>
+          <select (change)="test()" name="textFont" style="color:black;" [(ngModel)]="cusForm.textFont">
+                  <option *ngFor="let tfont of tFonts" style="color:black;" [value]="tfont">{{tfont}}</option>
+          </select>
+      </td>
+      <td>
+      <!--(change)="onHeroChange($event)"-->
+      <label for="ChordFont">Set Chord Font:</label>
+          <select (change)="test()" name="chordFont" style="color:black;" [(ngModel)]="cusForm.chordFont">
+                <option *ngFor="let cfont of cFonts" style="color:black;" [value]="cfont">{{cfont}}</option>
+          </select>
+      </td>
+      </tr>
+      <tr>
+      <td>
+      <label for="TabFont">Set Tab Font:</label>
+          <select (change)="test()" name="tabFont" style="color:black;" [(ngModel)]="cusForm.tabFont">
+                  <option *ngFor="let tabfont of tabFonts" style="color:black;" [value]="tabfont">{{tabfont}}</option>
+          </select>
+      </td>
+      <td>
+      <label for="Textcolor">Set Text Colour for Verse:</label>
+      <input type="color" [(ngModel)]="cusForm.textColor" style="color:black;" id="tcolor" name="Textcolor" (change)="test()">
+      </td>
+      </tr>
+      <tr>
+        <td>
+      <label for="Chordcolor">Set Text Colour for Chord:</label>
+      <input type="color" [(ngModel)]="cusForm.chordColor" id="ccolor" name="Chordcolor" (change)="test()">
+      </td>
+      <td>
+      <label for="Tabcolor">Set Text Colour for Tab:</label>
+      <input type="color" [(ngModel)]="cusForm.tabColor" id="tabcolor" name="Tabcolor" (change)="test()">
+      </td>
+      </tr>
+      <tr>
+      <td>
+      <label for="TextSize">Set Text Size:</label>
+      <select (change)="test()" name="textSize" style="color:black;" [(ngModel)]="cusForm.textSize">
+              <option *ngFor="let tsize of sizes" style="color:black;" [value]="tsize">{{tsize}}</option>
+      </select>
+      </td>
+      <td>
+      <label for="ChordSize">Set Chord Size:</label>
+          <select (change)="test()" name="chordSize" style="color:black;" [(ngModel)]="cusForm.chordSize">
+                  <option *ngFor="let csize of sizes" style="color:black;" [value]="csize">{{csize}}</option>
+          </select>
+      </td>
+      </tr>
+      <tr>
+      <td>
+      <label for="TabSize">Set Tab Size:</label>
+          <select (change)="test()" name="tabSize" style="color:black;" [(ngModel)]="cusForm.tabSize">
+                  <option *ngFor="let tabsize of sizes" style="color:black;" [value]="tabsize">{{tabsize}}</option>
+      </select>
+      </td>
+      <td>
+      <label for="MetaSize">Set Meta Directive Size:</label>
+          <select (change)="test()" name="metaSize" style="color:black;" [(ngModel)]="cusForm.metaSize">
+                  <option *ngFor="let msize of sizes" style="color:black;" [value]="msize">{{msize}}</option>
+      </select>
+      </td>
+      </tr>
+      <tr>
+      <td>
+      <label for="MetaFont">Set Meta Font:</label>
+          <select (change)="test()" name="metaFont" style="color:black;" [(ngModel)]="cusForm.metaFont">
+             <option *ngFor="let mfont of tFonts" style="color:black;" [value]="mfont">{{mfont}}</option>
+          </select>
+      </td>
+      <td>
+      <label for="Metacolor">Set Colour for Meta Directive:</label>
+      <input type="color" [(ngModel)]="cusForm.metaColor" id="metacolor" name="Metacolor" (change)="test()">
+      </td>
+      </tr>
+    </table>
+  </div>
+</div>
+</div>

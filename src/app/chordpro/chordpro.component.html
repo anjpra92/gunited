@@ -1,0 +1,108 @@
+<div class="container">
+  <div *ngIf="!auth.authenticated() && !bClicked" style="text-align: center;">
+    <p class="lead">Paste or Key in your content in the text area and hit 'Convert!'</p>
+  </div>
+  <div id="optdesign" *ngIf="auth.authenticated() && !bClicked && !opFlg">
+    <h2><b><i>Welcome {{auth.userProfile.nickname}} !</i></b></h2>
+    <p class="lead">How would you like to convert your files today? Choose any one of the options below!</p>
+    <!--Option Design -->
+      <div class="row">
+        <div class="col-lg-4">
+          <img class="rounded-circle" [src]="option1URL" alt="textarea option" width="140" height="140">
+          <h2>Use the Text Area!</h2>
+          <p>Copy and or key in your chords in the text area shown and voila! You have your converted files in your desired format!</p>
+          <p><button class="btn btn-default" (click)="setOp1Flg()" role="button">Click Me! &raquo;</button></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <img class="rounded-circle" [src]="option2URL" alt="textfile option" width="140" height="140">
+          <h2>Upload a Text File!</h2>
+          <p>Do you have your chords and songsheets already saved? You can upload your text file and have your songs converted into your favourite format!</p>
+          <p><button class="btn btn-primary" role="button" (click)="setOp2Flg()">Click Me! &raquo;</button></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <img class="rounded-circle" [src]="option3URL" alt="zip file option" width="140" height="140">
+          <h2>Upload a Zip File!</h2>
+          <p>This option is best suited for those who have a compressed folder with all their songs to be converted in one go!</p>
+          <p><button class="btn btn-success" role="button" (click)="setOp3Flg()">Click Me! &raquo;</button></p>
+        </div><!-- /.col-lg-4 -->
+      </div>
+  </div> <!--optdesign-->
+  <!--Options appearing for authenticated users-->
+  <div *ngIf="auth.authenticated()"> 
+      <div class="inner1" *ngIf="!bClicked && op1Flg">
+        <p class="lead">Paste or Key in your content in the text area and hit 'Convert!'</p>
+        <textarea #taid class="twrap" style="background-color:white;" [(ngModel)]="input" rows="10" cols="90"></textarea>
+      </div>
+      <div class="inner1" *ngIf="!bClicked && op2Flg">
+        <p class="lead">Upload Your Text File and Hit Convert!</p>
+        <input type='file' accept='text/plain' (change)='openFile($event)'>
+      </div>
+      <!--Zip File option-->
+        <div class="inner1" *ngIf="!bClicked && auth.authenticated() && op3Flg">
+        <p class="lead">Upload Your Zip File and Hit Convert!</p>
+        <input id="inputFile" type='file' accept='text/plain' (change)='handleZip($event)'>
+      </div>
+   </div> 
+   <div *ngIf="!auth.authenticated()">
+      <div class="inner1" *ngIf="!bClicked">
+        <textarea #taid class="twrap" style="background-color:white;" [(ngModel)]="input" rows="10" cols="90"></textarea>
+      </div>
+   </div>
+  <br>
+  <br>
+  <div class="buttonContainer">
+    <button id = "b2" class="btn btn-info" *ngIf="bClicked" (click)="clrConvert()">Convert New File!</button>  
+    <div *ngIf="auth.authenticated() && opFlg">
+      <button id="b1" class="btn btn-success" *ngIf="!bClicked" (click)="convert()">Convert!</button>
+    </div>
+    <div *ngIf="!auth.authenticated()">
+      <button id="b1" class="btn btn-success" *ngIf="!bClicked" (click)="convert()">Convert!</button>
+    </div>
+  </div>
+  <br>
+  <br>
+  <!--Form Control-->
+<div class="inner2" *ngIf="bClicked">
+    <div class="checkboxContainer">
+        <input type="checkbox" id="myCheck" (change)="handleClick()"/>
+        <label for="myCheck" *ngIf="!showImgs"><strong>Show Chord Diagrams</strong></label>
+        <label for="myCheck" *ngIf="showImgs"><strong>Hide Chord Diagrams</strong></label>
+        <span>&nbsp;</span>
+        <input type="checkbox" id="hoverOver" (change)="hoverClick()"/>
+        <label for="hoverOver" *ngIf="!hoverImgs"><strong>Activate Hover Over Chord Diagrams</strong></label>
+        <label for="hoverOver" *ngIf="hoverImgs"><strong>Deactivate Hover Over Chord Diagrams</strong></label>
+        <span>&nbsp;</span>
+        <input type="checkbox" id="formatOps" (change)="formatClick()"/>
+        <label for="formatOps" *ngIf="!showFmts"><strong>Show Formatting Options</strong></label>
+        <label for="formatOps" *ngIf="showFmts"><strong>Hide Formatting Options</strong></label>
+    </div> 
+  <div *ngIf="showFmts">
+    <app-formatop (emitEvent)="buttonMessage($event)"></app-formatop>
+  </div>
+  <br>
+  <!--PlayList Layout Change-->
+  <div id="playList" *ngIf="listFlg" class="list-group listgrp">
+    <p><b><i> Songs Converted : </i></b></p>
+    <div *ngFor="let song of SongArr; let i = index" [attr.data-index]="i">
+      <div class="list-group-item">
+        <input *ngIf="auth.authenticated()" class="chkbox enabled" id="{{ 'cobject-'+[i+1]}}" type="checkbox" name="checkBoxList" value="{{ 'object-'+[i+1]}}" (change)="saveClick($event)">
+        <span>&nbsp;</span>
+        <a [routerLink]="['/convert']" fragment="{{ 'sobject-'+[i+1]}}" (click)="onAnchorClick($event)">{{song.cFormat.title}}</a>
+      </div>
+    </div>
+  <div id="buttonSave" *ngIf="auth.authenticated()" style=" text-align:center;" class="list-group-item">
+    <a *ngIf="allSelected" class="btn btn-info btn-sm" id="b8" [routerLink]="['/songbook']">Songs Saved to SongBook! Click here to go to SongBook</a> 
+    <a *ngIf="!allSelected" style="color:black;font-weight:bold" id = "b6" class="btn btn-warning" (click)="selectAllSongs()">Select All Songs </a>
+    <span>&nbsp;</span>
+    <span>&nbsp;</span>
+    <a *ngIf="!allSelected" style="color:black;font-weight:bold" id="b7" class="btn btn-warning" (click)="saveSelected()">Save Selected !</a> 
+  </div>
+ </div>
+<!-- End of PlayList Layout Change-->
+ <div *ngFor="let arr of testArr; let i = index" [attr.data-index]="i">
+    <app-song #songlist [song]="arr" [imgFlg]="showImgs" [changeTrigger]="changeTrigger" [cusForm]="cusForm" [index]="i" [allSelected]="allSelected" [disabledChk]="disabledChk" (saveEvent)="songDisable($event)" ></app-song>
+  </div>
+</div>     
+</div>
+
+

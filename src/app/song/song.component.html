@@ -1,0 +1,34 @@
+<div id="{{ 'sobject-' + [index+1] }}" class="mainSongDiv">
+<div class="container-fluid" #checkID>
+<div class = "row wrapper" #songContainer>
+      <div #misCe class="misCe col-md-6">
+      </div> 
+      <br>
+      <br>
+      <!--<div #chordDig *ngIf="imgFlg" class="chordDig col-md-6">-->
+      <div #chordDig [hidden]="!imgFlg" class="chordDig col-md-6">
+        <p style="text-align:center;"><b>Chord Diagrams</b></p>
+          <div #containerDiv [innerHTML]="acidjsxchord"></div>
+          <div #ngFdiv>
+          <div class="center" *ngFor="let chordi of check1">
+              <ins class="scales_chords_api" [attr.chord]="chordi"></ins>
+              <ins class="scales_chords_api" [attr.chord]="chordi" output="sound"></ins>
+          </div>
+         </div>
+      </div>
+      <br>
+</div>
+<br>
+<div style="text-align:center">
+    <a [routerLink]="['.']" class="btn btn-link" fragment="playList" (click)="anchorClick()">Go Back to PlayList</a>  
+</div> 
+<br>
+<div id="buttonSave" *ngIf="auth.authenticated()" style=" text-align:center;">
+    <div *ngIf="!allSelected">
+        <a *ngIf="!songSaveFlg" id = "b3" class="btn btn-primary btn-sm" (click)="saveToSongBk()">Save to my SongBook!</a> 
+    </div>
+    <a *ngIf="songSaveFlg || allSelected" id = "b4" class="btn btn-success btn-sm" [routerLink]="['/songbook']">Click here to go to your SongBook!</a>
+</div>
+</div>
+</div>
+<hr>
