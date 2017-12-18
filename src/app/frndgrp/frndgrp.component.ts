@@ -49,15 +49,12 @@ export class FrndgrpComponent implements OnInit {
     this.grpSer.fetchGroupDetails(this.auth.userProfile.email).subscribe(
     data => {
         this.groupDetail = data;
-        console.log('groupdet:',this.groupDetail);
         for(var i=0;i<this.groupDetail.length;i++)
         {
           this.olNameArr.push(this.groupDetail[i].groupName)
         } 
-        console.log("Group name array: ", this.olNameArr);
         if(this.olNameArr.length == 0)
         {
-            console.log('No groups');
             this.noOldFlg = true;
         }
     });
@@ -85,13 +82,11 @@ export class FrndgrpComponent implements OnInit {
 
   checkDuplicate()
   {
-    console.log('Check for duplicates');
     if(!this.noOldFlg)
     {
       if(this.olNameArr.indexOf(this.gName) > -1)
       {
         this.errFlg = true;
-       console.log('Error Flag:',this.errFlg);
       }
       else
       {
@@ -105,26 +100,22 @@ export class FrndgrpComponent implements OnInit {
     this.checkDuplicate();
     if(this.songBookcall)
     {
-      console.log('SongBook Call is TRUE');
       this.scall = true;
     }
     else
     {
-      console.log('SongBook Call is FALSE');
       this.scall = false;
     }
     //From Home Page
     if(!this.errFlg && !this.scall)
     {
-      console.log('FROM HOME PAGE');
-      console.log('Friend email obtained from parent:',this.fr_email);
+
       this.gName = this.gName.charAt(0).toUpperCase()+this.gName.slice(1);
       const group = new Group(this.auth.userProfile.email,this.gName,this.fr_email,'');
       this.grpSer.saveGroup(group).subscribe(
           response => 
           {
               this.groupdet = response;
-              console.log('Got Response after saving:',response);
           });
      this.succFlg = true;
      this.renderer2.removeClass(this.optionDiv.nativeElement,'hidden');
@@ -139,14 +130,11 @@ export class FrndgrpComponent implements OnInit {
     }
     else if(!this.errFlg && this.scall)
     {
-      console.log('FROM SONGBOOK PAGE');
-      console.log('Playlist name obtained from parent:',this.playListAdd);
       const group = new Group(this.auth.userProfile.email,this.gName,'',this.playListAdd);
       this.grpSer.saveGroupPl(group).subscribe(
           response => 
           {
               this.groupdet = response;
-              console.log('Got Response after saving:',response);
           });
      this.succFlg = true;
      this.renderer2.removeClass(this.optionDiv.nativeElement,'hidden');
@@ -173,12 +161,10 @@ export class FrndgrpComponent implements OnInit {
     }
     if(!this.scall)
     {
-      console.log('Friend email obtained from parent inside upd:',this.fr_email);
       this.fetchGroupDet(this.oldgName,this.fr_email);
     }
     else if(this.scall)
     {
-      console.log('Playlist name obtained from parent inside upd:',this.playListAdd);
       this.fetchGroupDetPl(this.oldgName,this.playListAdd);
     }
   }
@@ -193,17 +179,13 @@ export class FrndgrpComponent implements OnInit {
     this.updErrFlg = false;
     this.renderer2.removeClass(this.optionDiv.nativeElement,'hidden');
     var rb1 = document.getElementById("rb1");
-    console.log('RB1:',rb1);
     if(rb1)
     {
-      console.log('Checked false for rb1');
       this.renderer2.setProperty(rb1,'checked',false);
     }
     var rb2 = document.getElementById("rb2");
-    console.log('RB2:',rb1);
     if(rb2)
     {
-      console.log('Checked false for rb2');
       this.renderer2.setProperty(rb2,'checked',false);
     }  
   }
@@ -218,17 +200,13 @@ export class FrndgrpComponent implements OnInit {
     //this.opFlg = false;
     this.renderer2.removeClass(this.optionDiv.nativeElement,'hidden');
     var rb1 = document.getElementById("rb1");
-    console.log('RB1:',rb1);
     if(rb1)
     {
-      console.log('Checked false for rb1');
       this.renderer2.setProperty(rb1,'checked',false);
     }
     var rb2 = document.getElementById("rb2");
-    console.log('RB2:',rb1);
     if(rb2)
     {
-      console.log('Checked false for rb2');
       this.renderer2.setProperty(rb2,'checked',false);
     }  
     this.succFlg = true;
@@ -244,16 +222,13 @@ export class FrndgrpComponent implements OnInit {
     this.grpSer.fetchGrpDet(gname,this.auth.userProfile.email).subscribe(
     data => {
         this.groupRes = data;
-        console.log('Group REs:',this.groupRes);
         this.friendArr = this.groupRes[0].friendEmails;
-        console.log('FRIEND EMAILS:',this.friendArr);
         if(this.friendArr.indexOf(fremail)>-1)
         {
           this.updErrFlg = true;
         }
         if(!this.updErrFlg)
         {
-          console.log('Inside if loop of !upderrflg')
           this.grpSer.updReq(this.auth.userProfile.email,this.oldgName,this.fr_email).subscribe(
             response => {
               this.groupdet = response;
@@ -281,9 +256,7 @@ export class FrndgrpComponent implements OnInit {
     this.grpSer.fetchGrpDet(gname,this.auth.userProfile.email).subscribe(
     data => {
         this.groupRes = data;
-        console.log('Group REs:',this.groupRes);
         this.playNameArr = this.groupRes[0].playListNames;
-        console.log('Playlist names:',this.playNameArr);
         if(this.playNameArr.length != 0)
         {
             if(this.playNameArr.indexOf(plname)>-1)
@@ -293,7 +266,6 @@ export class FrndgrpComponent implements OnInit {
         }
         if(!this.updErrFlg)
         {
-          console.log('Inside if loop of !upderrflg')
           this.grpSer.updReqpl(this.auth.userProfile.email,this.oldgName,plname).subscribe(
             response => {
               this.groupdet = response;

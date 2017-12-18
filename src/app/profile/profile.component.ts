@@ -17,7 +17,6 @@ export class ProfileComponent implements OnInit {
     {
       this.propic = true;
     }
-    console.log('User Profile:',auth.userProfile);
   }
 
   ngOnInit() {

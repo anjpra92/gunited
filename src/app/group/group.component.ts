@@ -69,16 +69,13 @@ export class GroupComponent implements OnInit {
     this.grpSer.fetchGroupDetails(this.auth.userProfile.email).subscribe(
     data => {
         this.groupDetail = data;
-        console.log('groupdet:',this.groupDetail);
         for(var i=0;i<this.groupDetail.length;i++)
         {
           this.groupNameArr.push(this.groupDetail[i].groupName);
           //Checks if useremail is present in the friendemails i.e if user is shared any group
         } 
-        console.log("Group name array: ", this.groupNameArr);
         if(this.groupNameArr.length == 0)
         {
-            console.log('No groups');
             this.noOldFlg = true;
         }
     });
@@ -90,30 +87,22 @@ export class GroupComponent implements OnInit {
     this.grpSer.fetchAllGrpDet().subscribe(
     data => {
         this.allGroupDetail = data;
-        console.log('allgroupdet:',this.allGroupDetail);
         for(var i=0;i<this.allGroupDetail.length;i++)
         {
           //Checks if useremail is present in the friendemails i.e if user is shared any group
-          console.log('Friend emails:',this.allGroupDetail[i].friendEmails);
           if(this.allGroupDetail[i].friendEmails.length != 0)
           {
             if(this.allGroupDetail[i].friendEmails.indexOf(this.auth.userProfile.email)>-1)
             {
-              console.log('MY EMAIL ID IS PRESENT IN THE LIST')
               var amail = this.allGroupDetail[i].authEmail;
               var plnames = this.allGroupDetail[i].playListNames;
-              console.log('AuthEmail:',amail);
-              console.log('Plnames:',plnames);
               for(var j=0;j<plnames.length;j++)
               {
-                console.log('Inside for loop');
                 var obj = {};
                 obj["authemail"] = amail;
                 obj["plname"] = plnames[j];
-                console.log('PLNAME:',plnames[j]);
                 this.playListArr.push(obj);
               }
-              console.log('Playlistarr length:',this.playListArr.length);
             }
           }
         }
@@ -121,44 +110,32 @@ export class GroupComponent implements OnInit {
         {
                 this.noShare = true;
         }
-        console.log('PLAY LIST SHARED WITH ME:',this.playListArr);
     }); 
   }
   onExpandPlGroup(aemail,plname,i)
   {
    if(this.expandPlArr.length)
    {
-       console.log('expandarr has content:',this.expandPlArr);
        var td = document.getElementById("t1object-"+this.expandPlArr[0]);
-       console.log('TD ELEMENT TO hide:',td);
        this.renderer2.addClass(td,'hidden');
        var expButton = document.getElementById("e1object-"+this.expandPlArr[0]);
-       console.log('expbutton close:',expButton);
        this.renderer2.removeStyle(expButton,'display');
        var clsButton = document.getElementById("c1object-"+this.expandPlArr[0]);
-       console.log('clsButton close:',clsButton);
        this.renderer2.setStyle(clsButton,'display','none');
        this.exp1Flg = false;
        this.expandPlArr.splice(-1,1);
     }
    var n = i+1;
-   console.log('Table element clicked expand:',n);
-   console.log('aemail:',aemail);
-   console.log('plname:',plname);
     this.playser.fetchPlist(aemail,plname).subscribe(
           data => {
             this.plsongArr = data;
-            console.log('Response for fetching all songs corresponding to playlist name',this.plsongArr);
           });
     this.exp1Flg = true;
     var td = document.getElementById("t1object-"+n);
-    console.log('TD ELEMENT TO DISPLAY:',td);
     this.renderer2.removeClass(td,'hidden');
     var expButton = document.getElementById("e1object-"+n);
-    console.log('expbutton:',expButton);
     this.renderer2.setStyle(expButton,'display','none');
     var clsButton = document.getElementById("c1object-"+n);
-    console.log('clsButton:',clsButton);
     this.renderer2.removeStyle(clsButton,'display');
     this.expandPlArr.push(n);
   }
@@ -184,23 +161,16 @@ export class GroupComponent implements OnInit {
   closePlList(i)
   {
    var n = i+1;
-   console.log('Table element clicked expand:',n);
-   console.log('inside closelist');
    this.exp1Flg = false;
    var td = document.getElementById("t1object-"+n);
-   console.log('TD ELEMENT TO hide:',td);
    this.renderer2.addClass(td,'hidden');
    var expButton = document.getElementById("e1object-"+n);
-   console.log('expbutton close:',expButton);
    this.renderer2.removeStyle(expButton,'display');
    var clsButton = document.getElementById("c1object-"+n);
-   console.log('clsButton close:',clsButton);
    this.renderer2.setStyle(clsButton,'display','none');
    if(this.expandPlArr.length)
    {
-       console.log('Expand Arr has length');
        this.expandPlArr.splice(-1,1);
-       console.log('EXPANDARR in closelist:',this.expandPlArr);
    }
   }
 
@@ -209,15 +179,11 @@ export class GroupComponent implements OnInit {
    console.log('Onexpand group');
    if(this.expandArr.length)
    {
-       console.log('expandarr has content:',this.expandArr);
        var td = document.getElementById("tobject-"+this.expandArr[0]);
-       console.log('TD ELEMENT TO hide:',td);
        this.renderer2.addClass(td,'hidden');
        var expButton = document.getElementById("eobject-"+this.expandArr[0]);
-       console.log('expbutton close:',expButton);
        this.renderer2.removeStyle(expButton,'display');
        var clsButton = document.getElementById("cobject-"+this.expandArr[0]);
-        console.log('clsButton close:',clsButton);
        this.renderer2.setStyle(clsButton,'display','none');
        this.finUserDet = [];
        this.userDet = [];
@@ -231,11 +197,8 @@ export class GroupComponent implements OnInit {
     this.grpSer.fetchGrpDet(groupname,this.auth.userProfile.email).subscribe(
       data => {
         this.sGroupDet = data;
-        console.log('Fetched single group detail:',this.sGroupDet);
         this.playNameArr = this.sGroupDet[0].playListNames;
         this.friendArr = this.sGroupDet[0].friendEmails;
-        console.log('PlayList Names fetched:',this.playNameArr);
-        console.log('Friends Fetched:',this.friendArr);
         // To get name associated with email
         this.fetchService.fetchAllUsers().subscribe(
         data => {
@@ -259,7 +222,6 @@ export class GroupComponent implements OnInit {
               this.userDet.push(obj)
             }
           }
-          console.log('Updated userdet object:',this.userDet);
           for(var i=0;i<this.friendArr.length;i++)
           {
             for(var j=0;j<this.userDet.length;j++)
@@ -273,11 +235,9 @@ export class GroupComponent implements OnInit {
               }
             } 
           }
-          console.log('Final user detail:',this.finUserDet);
         });
         if(this.friendArr.length == 0 )
         {
-          console.log('No Friends in group');
           this.noFrFlg = true;
         }
         if(this.playNameArr.length == 0)
@@ -288,15 +248,12 @@ export class GroupComponent implements OnInit {
           this.expFlg = true;
           //Show the div
            var td = document.getElementById("tobject-"+n);
-           console.log('TD ELEMENT TO DISPLAY:',td);
            this.renderer2.removeClass(td,'hidden');
       });
       this.expFlg=true;
       var expButton = document.getElementById("eobject-"+n);
-      console.log('expbutton:',expButton);
       this.renderer2.setStyle(expButton,'display','none');
       var clsButton = document.getElementById("cobject-"+n);
-      console.log('clsButton:',clsButton);
       this.renderer2.removeStyle(clsButton,'display');
        this.expandArr.push(n);
   }
@@ -307,23 +264,17 @@ export class GroupComponent implements OnInit {
    var n = i+1;
    this.finUserDet = [];
    this.userDet = [];
-   console.log('Table element clicked close:',n);
    this.expFlg = false;
    this.noPlFlg = false;
    var td = document.getElementById("tobject-"+n);
-   console.log('TD ELEMENT TO hide:',td);
    this.renderer2.addClass(td,'hidden');
    var expButton = document.getElementById("eobject-"+n);
-   console.log('expbutton close:',expButton);
    this.renderer2.removeStyle(expButton,'display');
    var clsButton = document.getElementById("cobject-"+n);
-    console.log('clsButton close:',clsButton);
    this.renderer2.setStyle(clsButton,'display','none');
    if(this.expandArr.length)
    {
-       console.log('Expand Arr has length');
        this.expandArr.splice(-1,1);
-       console.log('EXPANDARR in closelist:',this.expandArr);
    }
  }
 
@@ -353,7 +304,6 @@ export class GroupComponent implements OnInit {
       {
         this.expandArr = [];
       }
-      console.log('Updated grouplist array:',this.groupNameArr);
  }
  
  onConfGroup(i)

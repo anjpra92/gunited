@@ -42,7 +42,6 @@ export class AuthService {
     // Add callback for the Lock `authenticated` event
     this.lock.on("authenticated", (authResult) => 
     {
-      console.log('authresult object:',authResult);
       localStorage.setItem('accessToken', authResult.accessToken);
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('refreshToken', authResult.refreshToken);
@@ -66,7 +65,6 @@ export class AuthService {
   public login()
   {
     // Call the show method to display the widget.
-    console.log('Inside login');
     this.lock.show(this.options);
   }
 

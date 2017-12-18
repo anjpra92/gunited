@@ -63,7 +63,6 @@ export class HomeComponent implements OnInit {
     data => {
       this.susers = data;
       this.userLength = this.susers.length; 
-      console.log("Fetched User Details: ", this.susers);
       //Only Displaying those users whose email id is verified
       for(var i=0;i<this.susers.length;i++)
       {
@@ -73,21 +72,16 @@ export class HomeComponent implements OnInit {
           }
       }
     });
-     console.log('Check oninit flag:',this.showGrpComp);
   }
 
   addGrpFlg(friendemail,i)
   {
     console.log('showGrpComp be4:',this.showGrpComp);
     this.fremail = friendemail;
-    console.log('FRIEND EMAIL FROM ADD GRP FLG:',this.fremail);
     var n = i+1;
-    console.log('Table element clicked expand:',n);
     var div = document.getElementById("gobject-"+n);
-    console.log('div to display when addgrpflg clicked:',div);
     this.renderer2.removeClass(div,'hidden');
     this.showGrpComp = true;
-    console.log('showGrpComp after:',this.showGrpComp);
   }
 
   flgDisable(obj)
@@ -99,7 +93,6 @@ export class HomeComponent implements OnInit {
       this.showGrpComp = false;
       var n = obj.val2+1;
       var div = document.getElementById("gobject-"+n);
-      console.log('div ELEMENT TO hide:',div);
       this.renderer2.addClass(div,'hidden');
     }
     else if(!obj.val)

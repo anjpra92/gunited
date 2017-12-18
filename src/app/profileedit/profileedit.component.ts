@@ -67,10 +67,7 @@ export class ProfileeditComponent implements OnInit {
   {
       this.uploader.onAfterAddingFile = (file)=> { file.withCredentials = false; };
       this.uploader.onCompleteItem = (item:any, response:any, status:any, headers:any) => {
-      console.log("ImageUpload:uploaded:", item, status, response);
-      console.log('Response:',response);
       this.profilePic="https://gunited-app-aprabha7.c9users.io/api/uploads/"+response;
-      console.log("Profilepic Url:", this.profilePic);
       };
   }
 

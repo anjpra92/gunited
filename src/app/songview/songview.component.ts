@@ -103,8 +103,6 @@ export class SongviewComponent implements OnInit {
   {
     this.songId = this.route.snapshot.paramMap.get('id');
     this.goBackComp = this.route.snapshot.paramMap.get('call');
-    console.log('goBackComp:',this.goBackComp);
-    console.log('Song ID obtained:',this.songId);
     //Fetching song from DB
     this.songSer.fetchSong(this.songId).subscribe(
       data => {
@@ -115,10 +113,6 @@ export class SongviewComponent implements OnInit {
         {
           this.acidjsHTML = this.sanitizer.bypassSecurityTrustHtml(this.songDetail.songDef);
         }
-        console.log('SONG DETAILS INSIDE SUBSCRIBE:',this.songDetail)
-        console.log('VerseHTML:',this.verseHTML);
-        console.log('chordHtml:',this.chordHTML);
-        console.log('acidjsHTML:',this.acidjsHTML);
         this.verseHtml.nativeElement.innerHTML = this.verseHTML;
         this.chordHtml.nativeElement.innerHTML = this.chordHTML;
         //Saving chords in original array
@@ -129,16 +123,13 @@ export class SongviewComponent implements OnInit {
             for( var i=0;i<remColorc.length;i++)
             {
                 var store = remColorc[i].childNodes[0].nodeValue;
-                console.log('STORE:',store);
                 remColorc[i].innerHTML = '';
                 remColorc[i].innerHTML = store;
             }
         }
         var tempCheck = document.getElementsByClassName("colorc");
-        console.log('TempChord EEE:',tempCheck);
         for( var i = 0 ; i< tempCheck.length ; i++)
         {
-          console.log('Tempchord inner html:',tempCheck[i].innerHTML);
           this.orgArr.push(tempCheck[i].innerHTML);
         }
       });
@@ -165,7 +156,6 @@ export class SongviewComponent implements OnInit {
       var remHref = document.getElementsByClassName("hoverc");
       if(this.hoverImgs)
       {
-          console.log('Hover was active when incr or decr was done');
           for( var j = 0 ; j < remHref.length ; j++)
           {
             remHref[j].remove();
@@ -174,7 +164,6 @@ export class SongviewComponent implements OnInit {
           var hsCheck = document.getElementById("hsCheck");
           this.renderer2.setProperty(hsCheck,'checked',false);
       }
-      console.log('Parent after removal:',parentTags);
       for( var i = 0 ; i< parentTags.length ; i++)
       {
           this.chordsStr.push(parentTags[i].childNodes[0].nodeValue);
@@ -189,7 +178,6 @@ export class SongviewComponent implements OnInit {
             var key = Object.keys(item)[0]; 
             obj[ key ] = item [ key ];  
         });
-        console.log('lookupArr1:',obj);
       }
       else if(this.decrFlag)
       {
@@ -199,7 +187,7 @@ export class SongviewComponent implements OnInit {
             var key = Object.keys(item)[0]; 
             obj[ key ] = item [ key ];  
         });
-        console.log('lookupArr2:',obj);
+
       }
       let chordMap = new Map(Object.entries(obj)); 
       for( var i = 0; i < this.chordsStr.length ; i++)
@@ -207,10 +195,8 @@ export class SongviewComponent implements OnInit {
           //todoo
           console.log('MAIN CHORDSTR LOOP');
           var tempvar = chordMap.get(this.chordsStr[i]);
-          console.log('Tempvar:',tempvar);
           if((tempvar == undefined) || (tempvar == "undefined"))
           {
-              console.log('Tempvar not found in chordmap, can be A#m,Abm,Am,A7');
               this.keyArray = Object.keys(obj);
               var iofm = this.chordsStr[i].charAt(1);
               //Character at 2nd position is b or #
@@ -218,7 +204,6 @@ export class SongviewComponent implements OnInit {
               {
                   console.log('Second char is b or #')
                   var baseValue = this.chordsStr[i].slice(0,2);
-                  console.log('BaseValue:',baseValue);
                   for(var j=0;j<this.keyArray.length;j++)
                   {
                       if(baseValue == this.keyArray[j])
@@ -226,9 +211,7 @@ export class SongviewComponent implements OnInit {
                           console.log('Base Value and key value is same');
                           var re1 = new RegExp(baseValue,"g");
                           var temp = chordMap.get(baseValue);
-                          console.log('Corresponding Pitch Inc/Dec:',temp);
                           var changeArrVal = this.chordsStr[i].replace(re1,temp);
-                          console.log('The chordString after replacement:',changeArrVal);
                           this.changedArr.push(changeArrVal);
                           break;
                       }
@@ -247,9 +230,7 @@ export class SongviewComponent implements OnInit {
                           console.log('Base Value and key value is same');
                           var re1 = new RegExp(baseValue,"g");
                           var temp = chordMap.get(baseValue);
-                          console.log('Corresponding Pitch Inc/Dec:',temp);
                           var changeArrVal = this.chordsStr[i].replace(re1,temp);
-                          console.log('The chordString after replacement:',changeArrVal);
                           this.changedArr.push(changeArrVal);
                           break;
                       }
@@ -258,8 +239,6 @@ export class SongviewComponent implements OnInit {
           }
           else
           {
-             console.log('tempvar has value');
-             console.log('after tempvar:',tempvar);
              this.changedArr.push(tempvar);
           }
       }
@@ -278,25 +257,12 @@ export class SongviewComponent implements OnInit {
       this.changedArr = this.changedArr.filter(function(elem, index, self) {
         return index === self.indexOf(elem);
       })
-      console.log('CHORDSSTR:',this.chordsStr);
-      console.log('Changed ARR:',this.changedArr);
-    //   for(var i = 0 ; i < this.chordsStr.length ; i++)
-    //   {
-    //       console.log('be4 CHORD DIGS:',chordDigs);
-    //       var rep = this.chordsStr[i];
-    //       var re = new RegExp(rep,"g"); 
-    //       chordDigs = chordDigs.replace(re,this.changedArr[i]);
-    //       console.log('REPLACED CHORD DIGS:',chordDigs);
-    //   }
-    //   var chordDigs = this.chordHtml.nativeElement.innerHTML;
       var chordDigs;
       this.chordHtml.nativeElement.innerHTML = "";
       for(var i = 0 ; i < this.chordsStr.length ; i++)
       {
           chordDigs = "<div class=\"center\"><ins class=\"scales_chords_api\" chord=\""+this.changedArr[i]+"\"></ins><ins class=\"scales_chords_api\" chord=\""+this.changedArr[i]+"\" output=\"sound\"></ins></div>";
-          console.log('chordDigs html append:',chordDigs);
           this.chordHtml.nativeElement.innerHTML += chordDigs;
-          console.log('chordhtml inner:',this.chordHtml.nativeElement.innerHTML);
       }
       //this.chordHtml.nativeElement.innerHTML = chordDigs;
       //console.log('chorddig:',chordDigs); 
@@ -309,17 +275,13 @@ export class SongviewComponent implements OnInit {
   resetPitch()
   {
       console.log('Inside reset pitch');
-      console.log('Original Array:',this.orgArr);
       //If Hover was activated when pitch increase was done
       var parentTags = document.getElementsByClassName("colorc");
       var remHref = document.getElementsByClassName("hoverc");
       if(this.hoverImgs)
       {
-          console.log('Hover was active when incr or decr was done');
-          console.log('I AM THE PARENT:',parentTags);
           for( var j = 0 ; j < remHref.length ; j++)
           {
-            console.log('THING TO REMOVE:',remHref[j]);
             remHref[j].remove();
           }
           this.hoverImgs = false;
@@ -333,7 +295,6 @@ export class SongviewComponent implements OnInit {
           tempArray.push(parentTags[i].childNodes[0].nodeValue);
           this.renderer2.setProperty(parentTags[i],'innerHTML',this.orgArr[i]);
       }
-      console.log('Temparray:',tempArray);
       tempArray = tempArray.filter(function(elem, index, self)
       {
         return index === self.indexOf(elem);
@@ -345,11 +306,9 @@ export class SongviewComponent implements OnInit {
       var chordDigs = this.chordHtml.nativeElement.innerHTML;
       for(var i = 0 ; i < tempArray.length ; i++)
       {
-          console.log('be4 CHORD DIGS:',chordDigs);
           var rep = tempArray[i];
           var re = new RegExp(rep,"g"); 
           chordDigs = chordDigs.replace(re,orgArray[i]);
-          console.log('REPLACED CHORD DIGS:',chordDigs);
       }
       this.chordHtml.nativeElement.innerHTML = chordDigs;
       tempArray = [];
@@ -380,14 +339,12 @@ export class SongviewComponent implements OnInit {
       console.log('element.checked:',element.checked);
       if(isChecked)
       {
-          console.log('setting true');
           this.showImgs = true;
           this.renderer2.addClass(this.verseHtml.nativeElement,'hidden');
           this.renderer2.removeClass(this.chordImg.nativeElement,'hidden');
       }
       else
       {
-          console.log('setting false');
           this.showImgs = false;
           this.renderer2.removeClass(this.verseHtml.nativeElement,'hidden');
           this.renderer2.addClass(this.chordImg.nativeElement,'hidden');
@@ -399,15 +356,12 @@ export class SongviewComponent implements OnInit {
       console.log('HandleHclick');
       var element = <HTMLInputElement> document.getElementById("hsCheck");
       var isChecked = element.checked;
-      console.log('element.checked:',element.checked);
       if(isChecked)
       {
-          console.log('setting true');
           this.hoverImgs = true;
       }
       else
       {
-          console.log('setting false');
           this.hoverImgs = false;
       }
   }
@@ -438,7 +392,6 @@ export class SongviewComponent implements OnInit {
         if(this.cusForm.tabColor)
         {  
             var tabtags = document.getElementsByClassName("tab");
-            console.log('tabtags:',tabtags);
             for(var i=0;i<tabtags.length;i++)
             {
                this.renderer2.setStyle(tabtags[i],'color',this.cusForm.tabColor);
@@ -447,7 +400,6 @@ export class SongviewComponent implements OnInit {
         if(this.cusForm.tabFont)
         {
             var tabtags = document.getElementsByClassName("tab");
-            console.log('tabtags:',tabtags);
             for(var i=0;i<tabtags.length;i++)
             {
                this.renderer2.setStyle(tabtags[i],'font-family',this.cusForm.tabFont);
@@ -456,7 +408,6 @@ export class SongviewComponent implements OnInit {
         if(this.cusForm.tabSize)
         {
             var tabtags = document.getElementsByClassName("tab");
-            console.log('tabtags:',tabtags);
             for(var i=0;i<tabtags.length;i++)
             {
                this.renderer2.setStyle(tabtags[i],'font-size',this.cusForm.tabSize+`px`);
@@ -465,7 +416,6 @@ export class SongviewComponent implements OnInit {
         if(this.cusForm.textFont)
         {
             var versetags = document.getElementsByClassName("masTxt");
-            console.log('Verse:',versetags);
             for(var i=0;i<versetags.length;i++)
             {
                this.renderer2.setStyle(versetags[i],'font-family',this.cusForm.textFont);
@@ -474,7 +424,6 @@ export class SongviewComponent implements OnInit {
        if(this.cusForm.textColor)
         {
             var versetags = document.getElementsByClassName("masTxt")
-            console.log('Verse:',versetags);
             for(var i=0;i<versetags.length;i++)
             {
                this.renderer2.setStyle(versetags[i],'color',this.cusForm.textColor);
@@ -483,7 +432,6 @@ export class SongviewComponent implements OnInit {
        if(this.cusForm.textSize)
         {
             var versetags = document.getElementsByClassName("masTxt")
-            console.log('Verse:',versetags);
             for(var i=0;i<versetags.length;i++)
             {
                this.renderer2.setStyle(versetags[i],'font-size',this.cusForm.textSize+`px`);
@@ -492,7 +440,6 @@ export class SongviewComponent implements OnInit {
         if(this.cusForm.chordColor)
         {
             var spantags = document.getElementsByClassName("chord")
-            console.log('Chord ID:',spantags);
             for(var i=0;i<spantags.length;i++)
             {
                this.renderer2.setStyle(spantags[i],'color',this.cusForm.chordColor);
@@ -502,7 +449,6 @@ export class SongviewComponent implements OnInit {
         if(this.cusForm.chordFont)
         {
             var spantags = document.getElementsByClassName("chord")
-            console.log('Chord ID:',spantags);
             for(var i=0;i<spantags.length;i++)
             {
                this.renderer2.setStyle(spantags[i],'font-family',this.cusForm.chordFont);
@@ -511,7 +457,6 @@ export class SongviewComponent implements OnInit {
         if(this.cusForm.chordSize)
         {
             var spantags = document.getElementsByClassName("chord")
-            console.log('Chord ID:',spantags);
             for(var i=0;i<spantags.length;i++)
             {
                this.renderer2.setStyle(spantags[i],'font-size',this.cusForm.chordSize+`px`);
@@ -520,7 +465,6 @@ export class SongviewComponent implements OnInit {
         if(this.cusForm.metaColor)
         {
             var ptags = document.getElementsByClassName("centercls")
-            console.log('Div:',ptags);
             for(var i=0;i<ptags.length;i++)
             {
                this.renderer2.setStyle(ptags[i],'color',this.cusForm.metaColor);
@@ -530,7 +474,6 @@ export class SongviewComponent implements OnInit {
         if(this.cusForm.metaFont)
         {
             var ptags = document.getElementsByClassName("centercls")
-            console.log('Div:',ptags);
             for(var i=0;i<ptags.length;i++)
             {
                this.renderer2.setStyle(ptags[i],'font-family',this.cusForm.metaFont);
@@ -539,7 +482,6 @@ export class SongviewComponent implements OnInit {
         if(this.cusForm.metaSize)
         {
             var ptags = document.getElementsByClassName("centercls")
-            console.log('Div:',ptags);
             for(var i=0;i<ptags.length;i++)
             {
                this.renderer2.setStyle(ptags[i],'font-size',this.cusForm.metaSize+`px`);

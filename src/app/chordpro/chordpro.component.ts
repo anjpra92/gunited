@@ -103,12 +103,10 @@ export class ChordproComponent implements OnInit
      if(e.target.checked)
      {
          this.checkBoxArr.push(str);
-         console.log('Checkbox Array Set:',this.checkBoxArr);
      }
      else
      {
          this.checkBoxArr.splice(this.checkBoxArr.indexOf(str),1);
-         console.log('Checkbox Array Popped:',this.checkBoxArr);
      }
  }
 //Select All Songs 
@@ -116,32 +114,26 @@ selectAllSongs()
 {
     console.log('Inside Select All');
     var checkboxes = document.getElementsByClassName("enabled");
-    console.log('CHECKBOXES IN SELECT ALL:',checkboxes);
     for(var i=0;i<checkboxes.length;i++)
     {
         var str:any;
         str = checkboxes[i].id;
         if (str.substring(0, 1) == 'c') 
         { 
-          console.log('Inside select all - changing id');
           str = str.substring(1);
         }
-        console.log('STR in SELECT ALL:',str);
         if(this.checkBoxArr.indexOf(str) <= -1)
         {
-          console.log('Setting to true');
           this.renderer2.setProperty(checkboxes[i],'checked',true);
           this.checkBoxArr.push(str);
         }
     }
-    console.log('Checkbox array inside selectall:',this.checkBoxArr);
 }
 //Save only selected songs
  saveSelected()
  {
     console.log('Inside Save Selected');
     this.songDb = this.components.toArray();
-    console.log('Converted SongDb array:',this.songDb);
     for(var i=0;i<this.songDb.length;i++)
     {
         var str = this.songDb[i].elementRef.nativeElement.firstChild.id;
@@ -151,13 +143,11 @@ selectAllSongs()
         }
         if(this.checkBoxArr.indexOf(str) > -1)
         {
-            console.log('Item is in CheckedArray!');
             this.songConsolidate(this.songDb,i);
         }
     }
     //Making the checkboxes whose songs are saved as disabled
     var checkBox = document.getElementsByClassName("chkbox");
-    console.log('CheckBox Tags:',checkBox);
     var count = 0;
     for(var i=0;i<checkBox.length;i++)
     {
@@ -169,22 +159,17 @@ selectAllSongs()
         }
         if(this.checkBoxArr.indexOf(str) > -1)
         {
-            console.log('Check Box song is saved and hence disable it');
             this.renderer2.setProperty(checkBox[i],'checked',false);
             this.renderer2.setProperty(checkBox[i],'disabled',true);
             this.renderer2.removeClass(checkBox[i],'enabled');
             this.renderer2.addClass(checkBox[i],'disableme');
-            console.log('AFTER ADDING disableme:',checkBox[i]);
             this.checkBoxArr.splice(this.checkBoxArr.indexOf(str),1);
-            console.log('CHKBOX ARRAY IN DISABLE:',this.checkBoxArr);
             this.disableFlg = true;
         }
     }
     //To Disable if all are selected
     var checkBox = document.getElementsByClassName("chkbox");
-    console.log('Length ckb:',checkBox.length);
     var disChkBox = document.getElementsByClassName("disableme");
-    console.log('length dis:',disChkBox.length);
     if(checkBox.length == disChkBox.length)
     {
         this.allSelected = true;
@@ -195,35 +180,25 @@ selectAllSongs()
     {
         var id = this.disabledBox[i].id;
         var newid = id.replace('c','s');
-        console.log('newid:',newid);
         this.disabledChk.push(newid);
         this.changeTrigger ++;
     }
-    console.log('Songs to be disabled:',this.disabledChk);
 
  }
 
  songConsolidate(songDb:any,i)
  {
-    console.log('Inside SongConsolidate');
-    console.log('Title in consolidate:',this.songDb[i].cFormat.title);
-    console.log('Counter i:',i);
+
     this.songName = this.songDb[i].cFormat.title;
     this.songvHtml = this.songDb[i].misCe.nativeElement.innerHTML;
     this.songDefHtml = this.songDb[i].acidjsxchordDb; 
     this.songdHtml = this.songDb[i].ngFdiv.nativeElement.innerHTML;
     this.authEmail = this.songDb[i].authEmail;
-    console.log('Vauthemail:',this.authEmail);
-    console.log('VSong Name:',this.songName);
-    console.log('Vsong html:',this.songvHtml)
-    console.log('Vsongdef:',this.songDefHtml)
-    console.log('Vdhtml:',this.songdHtml)
     const song = new SongBook(this.authEmail,this.songName,this.songvHtml,this.songDefHtml,this.songdHtml);
     this.songSer.saveSong(song).subscribe(
         response => 
         {
             this.songSerRes = response;
-            console.log('Got Response after saving:',response);
         }); 
  }
 
@@ -255,7 +230,6 @@ selectAllSongs()
     let reader = new FileReader();
     reader.onload = () => {
         this.textFile = reader.result;
-        console.log('textfile:',this.textFile);
     };
     // reader.readAsText(input,'ascii');
     reader.readAsText(input);
@@ -270,8 +244,6 @@ selectAllSongs()
        var fileMain = new JSZip();
        this.result = fileMain.loadAsync(zipFileToLoad).then(function (zip)
       {
-        console.log('Zip:',zip);
-        console.log('zip files:',zip.files);
         var entries = Object.keys(zip.files).map(function (name) 
         {
             return zip.files[name];
@@ -283,9 +255,7 @@ selectAllSongs()
                     return fileData;
                 });
         });
-       console.log('List of Promises:',listOfPromises);
        var promiseOfList = Promise.all(listOfPromises);
-       console.log('Promise of List:',promiseOfList);
        //return promiseOfList;
        return promiseOfList.then(function(list)
        {
@@ -295,7 +265,6 @@ selectAllSongs()
       });
 
     this.result.then((list) => {
-          console.log('List inside',list);
           this.op2Arr = list;
       })
    
@@ -304,7 +273,6 @@ selectAllSongs()
   buttonMessage(obj)
   {
         console.log('message from formatop');
-        console.log(obj);
         this.cusForm = obj;
         this.changeTrigger ++ ;   
   }
@@ -313,10 +281,7 @@ selectAllSongs()
   {
       console.log('Song ID saved from song component:',obj);
       var newid = obj.replace('s','c');
-      console.log('Newid:',newid);
       var chbox = document.getElementById(newid);
-      console.log('chbox:',chbox);
-      console.log('Check Box song is saved and hence disable it');
       this.renderer2.setProperty(chbox,'checked',false);
       this.renderer2.setProperty(chbox,'disabled',true);
       this.renderer2.removeClass(chbox,'enabled');
@@ -328,7 +293,6 @@ selectAllSongs()
         this.components.changes.subscribe((comps: QueryList <SongComponent>) =>
         {
             this.Song = comps.first;
-            console.log('Comps:',comps);
             this.SongArr = comps.toArray();
             if(this.SongArr)
             {
@@ -336,7 +300,6 @@ selectAllSongs()
                 this.cdr.detectChanges();
             }
         });
-        console.log('SONG ARRAY:',this.SongArr);
     }
 
     varInc()
@@ -358,8 +321,6 @@ selectAllSongs()
 
     onAnchorClick (e) 
     {
-        console.log('EVENT IN ANCHOR:',e);
-        console.log('Anchor hash:',e.target.hash);
         this.route.fragment.subscribe ( f => {
         const element = document.querySelector ("#" + f)
         if ( element ) element.scrollIntoView ( true )
@@ -394,12 +355,10 @@ selectAllSongs()
       console.log('element.checked:',element.checked);
       if(isChecked)
       {
-          console.log('setting true');
           this.showImgs = true;
       }
       else
       {
-          console.log('setting false');
           this.showImgs = false;
       }
     }
@@ -408,15 +367,12 @@ selectAllSongs()
   {
       var element = <HTMLInputElement> document.getElementById("formatOps");
       var isChecked = element.checked;
-      console.log('element.checked:',element.checked);
       if(isChecked)
       {
-          console.log('setting true fop');
           this.showFmts = true;
       }
       else
       {
-          console.log('setting false fop');
           this.showFmts = false;
       }
   }
@@ -425,15 +381,12 @@ selectAllSongs()
   {
       var element = <HTMLInputElement> document.getElementById("hoverOver");
       var isChecked = element.checked;
-      console.log('element.checked:',element.checked);
       if(isChecked)
       {
-          console.log('setting true ho');
           this.hoverImgs = true;
       }
       else
       {
-          console.log('setting false ho');
           this.hoverImgs = false;
       }
 
@@ -445,16 +398,13 @@ selectAllSongs()
         this.bClicked = true;
         if(this.op1Flg)
         {
-            console.log('Check Input from Text Area:',this.input);
             //Splits all the input text and stores each line in a separate array
             this.testArr = this.input.split('{ns}'||'{new_song}');
-            console.log(this.testArr);
         }
         else if(this.op2Flg)
         {
             //Splits all the input text and stores each line in a separate array
             this.testArr = this.textFile.split('{ns}'||'{new_song}');
-            console.log(this.testArr);
         }
         else if(this.op3Flg)
         {
@@ -466,7 +416,6 @@ selectAllSongs()
                 //Checks if the first file has more songs in it
                 if(this.op2Arr[i].search(regex) == -1 )
                 {
-                    console.log('Does not contain other songs in the file')
                     this.testArr.push(this.op2Arr[i]);
                 }
                 else
@@ -474,21 +423,18 @@ selectAllSongs()
                 {
                     console.log('Contains other songs in the file');
                     this.sampArr = this.op2Arr[i].split('{ns}'||'{new_song}');
-                    console.log('Sample Array:',this.sampArr);
                     for(var j = 0 ; j<this.sampArr.length ; j++)
                     {
                         this.testArr.push(this.sampArr[j]);
                     }
                 }
             }
-            console.log('The final testArr:',this.testArr);
         }
         else
         {
             console.log('Check Input from Text Area:',this.input);
             //Splits all the input text and stores each line in a separate array
             this.testArr = this.input.split('{ns}'||'{new_song}');
-            console.log(this.testArr);
         }
   }
 

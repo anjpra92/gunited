@@ -113,7 +113,6 @@ export class SongComponent implements OnInit,OnChanges {
       if(auth.authenticated())
       {
         this.authEmail = auth.userProfile.email;
-        console.log('Authemail:',this.authEmail);
       }
   }
 
@@ -131,12 +130,9 @@ export class SongComponent implements OnInit,OnChanges {
   {
     console.log('Save To Song Book');
     var inde = this.index+1;
-    console.log('Index inside save to songbook:',inde);
     var titleP = document.getElementById('titleid'+inde);
-    console.log('titleid:',titleP);
     this.songName = titleP.innerHTML;
     this.songvHtml = this.misCe.nativeElement.innerHTML;
-    console.log('Before bypassing security:',this.acidjsxchordDb);
     this.songdHtml = this.ngFdiv.nativeElement.innerHTML;
     const song = new SongBook(this.authEmail,this.songName,this.songvHtml,this.acidjsxchordDb,this.songdHtml);
     this.songSaveFlg = true;
@@ -146,7 +142,6 @@ export class SongComponent implements OnInit,OnChanges {
          this.songSerRes = response;
          this.router.navigate(['/convert']);
         }); 
-    console.log('Parent ID to be emitted:',this.checkID.nativeElement.parentElement.id);
     this.saveEvent.emit(this.checkID.nativeElement.parentElement.id);
    }
 
@@ -159,10 +154,8 @@ export class SongComponent implements OnInit,OnChanges {
       if(this.disabledChk)
       {
           var songDiv = this.checkID.nativeElement.parentElement.id;
-          console.log('songDiv:',songDiv);
           if(this.disabledChk.indexOf(songDiv) > -1)
           {
-              console.log('If the song component id is present disabledchk');
               this.songSaveFlg = true;
           }
       }
@@ -175,15 +168,12 @@ export class SongComponent implements OnInit,OnChanges {
     console.log("INDEX:",this.index);
     this.bClicked = true;
     this.inpArr = this.songArr.split('\n');
-    console.log('Breaking the song into several lines and storing them in inpArr:',this.inpArr);
     for( var i=0; i< this.inpArr.length; i++)
     {
     //Comment # Check
-    console.log('Content of input array:',this.inpArr[i]);
     //IF1
     if(/^\s*?\#/.test(this.inpArr[i]))
     {
-        console.log("inside comment check");
         this.inpArr[i] = this.inpArr[i].slice(1);
         this.cFormat[this.count] = {comment: this.inpArr[i]};
         // this.cFormat.comment = this.inpArr[i];
@@ -191,13 +181,10 @@ export class SongComponent implements OnInit,OnChanges {
     //Meta Directive,Formatting Directive and Environment Directive Check - IF2
     else if(/^\s*?\{/.test(this.inpArr[i]))
     {
-        console.log('Inside else for directive check');
         //Formatting Dir Check for Chorus and Image - IF6
         if(/^\s*?\{\s*?([a-z]*|[A-Z]*)\s*?\}/.test(this.inpArr[i]))
         {
-            console.log('Checking for formatting dir chorus/new_song');
             var result = /^\s*?\{\s*?(([a-z]*|[A-Z]*)|(new_song|ns))\s*?\}/ig.exec(this.inpArr[i]);
-            console.log('Formatting dir:',result);
             switch(result[1])
             {
             case 'chorus':
@@ -207,7 +194,6 @@ export class SongComponent implements OnInit,OnChanges {
                 this.renderer2.setProperty(div,'innerHTML',line);
                 //this.renderer2.appendChild(this.outputTest.nativeElement,div);
                 this.renderer2.appendChild(this.misCe.nativeElement,div);
-                console.log('div:',div);
                 break;
             case 'textfont': this.textfont = ""; break;
             case 'textsize': this.textsize = "";break;
@@ -225,7 +211,6 @@ export class SongComponent implements OnInit,OnChanges {
         {
         console.log('Inside meta/format directive check');
         var result = /^\s*?\{\s*?([a-z]*|[A-Z]*)\s*?\:/ig.exec(this.inpArr[i])
-        console.log('Result:',result[1]);
         //Call Meta Directive Check / Formatting Check Function  
         this.metaForCheck(result[1],i);
         }//IF3
@@ -234,12 +219,9 @@ export class SongComponent implements OnInit,OnChanges {
         {
         console.log('Inside environment directive check');
         var result = /^\s*?\{\s*?((?:(so[a-z]|eo[a-z]))|(?:(start|end))\s*?\_\s*?(?:of)\s*?\_\s*?([a-z]*))\s*?\}/ig.exec(this.inpArr[i]);
-        console.log('check new result:',result);
         result[1] = result[1].replace(/\s/g,''); //removing whitespaces
-        console.log('Result:',result[1]);
         //Call Environment Directive Check Function
         this.envCheck(result[1]);
-        console.log('Choflg:',this.choFlg);
         }//IF4
     }//IF2
     //Guitar Tab Instructions
@@ -250,9 +232,6 @@ export class SongComponent implements OnInit,OnChanges {
         var span = this.renderer2.createElement('span');
         this.renderer2.setProperty(span,'innerHTML',this.verse);
         this.renderer2.appendChild(this.pt,span);
-        console.log('Tab span:',span);
-        console.log('Tab p:',this.pt);
-        console.log('Tab div:',this.divpt);
     }
     //Chord and Note Check - IF5
     else
@@ -260,7 +239,6 @@ export class SongComponent implements OnInit,OnChanges {
         console.log('Inside chord and note check');
         // var loopRes = this.inpArr[i].match(/\[([A-Z]|[A-Z][0-9])\]([a-zA-Z]*[,|.]?)/g);
         // console.log('LoopResult:',loopRes);
-        console.log('Input String:',this.inpArr[i]);
         //Store chords in an array
         var re1 = /\[/g;
         var re2 = /\]/g;
@@ -288,10 +266,8 @@ export class SongComponent implements OnInit,OnChanges {
             for( var m=0;m<indexObr.length;m++)
             {
                 var subStr = this.inpArr[i].substring(indexObr[m]+1,indexCbr[m]);
-                console.log('Extracted chord:',subStr);
                 this.chordArr.push(subStr);
             }
-            console.log('finalMast:',this.chordArr);
             this.storeMasChord(this.chordArr);
         }
         //Consecutive chord characters with spaces in between
@@ -300,7 +276,6 @@ export class SongComponent implements OnInit,OnChanges {
             console.log('Valar Dohaeris');
             // var testArr = this.inpArr[i].match(/(\]([a-z]|[A-Z]|.|\,|\-)\[)/g);
             var testArr = this.inpArr[i].match(/(\]\s*?\[)/g);
-            console.log('matching strings:',testArr);
             //var obracket = /\[/g;
             var cbracket = /\]/g;
             var ntestArr = [];
@@ -310,14 +285,10 @@ export class SongComponent implements OnInit,OnChanges {
                 buf = buf.replace(cbracket,"]<span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span><span>.</span><span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span>");
                 ntestArr.push(buf);
             }
-            console.log('Pushed content inside ntestArr:',ntestArr);
             for( var k=0;k<testArr.length;k++)
             {
-                console.log('testArr[k]:',testArr[k]);
-                console.log('ntestArr[k]:',ntestArr[k]);
                 this.inpArr[i] = this.inpArr[i].replace(testArr[k],ntestArr[k]);
             }
-            console.log('STRING CHECK outside for loop:',this.inpArr[i]);
         }
         //Spacing for repetitive chord characters
         if(/(\]\s*?([a-z]|[A-Z]|.|\,|\-)\s*?\[)/.test(this.inpArr[i]))
@@ -325,7 +296,6 @@ export class SongComponent implements OnInit,OnChanges {
             console.log('Valar Morghulis');
             // var testArr = this.inpArr[i].match(/(\]([a-z]|[A-Z]|.|\,|\-)\[)/g);
             var testArr = this.inpArr[i].match(/(\]\s*?([a-z]|[A-Z]|.|\,|\-)\s*?\[)/g);
-            console.log('matching strings:',testArr);
             var obracket = /\[/g;
             var cbracket = /\]/g;
             var ntestArr = [];
@@ -341,22 +311,16 @@ export class SongComponent implements OnInit,OnChanges {
             console.log('Pushed content inside ntestArr:',ntestArr);
             for( var k=0;k<testArr.length;k++)
             {
-                console.log('testArr[k]:',testArr[k]);
-                console.log('ntestArr[k]:',ntestArr[k]);
                 this.inpArr[i] = this.inpArr[i].replace(testArr[k],ntestArr[k]);
             }
-            console.log('STRING CHECK outside for loop:',this.inpArr[i]);
         }
         this.inpArr[i] = this.inpArr[i].replace(re1,"<span id=\"chordid\" class=\"chord\">"+this.chordfont+this.chordsize+this.chordcolour);
         this.inpArr[i] = this.inpArr[i].replace(re2,"</span></span></span></span>");
         //this.inpArr[i] = this.inpArr[i].trim();
-        console.log('After replacing [] String:',this.inpArr[i]);
         if(this.inpArr[i] !== "")
         {
         //this.verse = `<p class=\"verse\">`+this.inpArr[i]+`</p>`;
         this.verse = `<div class=\"masTxt\">`+this.textfont+this.textcolour+this.textsize+`<p class=\"verse\">`+this.inpArr[i]+`</p></div></div></div></div>`;
-        console.log('Innerhtml look:',this.verse);  
-
             if(this.choFlg)
             {
                 console.log('chorus flag set');
@@ -372,14 +336,12 @@ export class SongComponent implements OnInit,OnChanges {
                 var div2 = this.renderer2.createElement('div');
                 this.renderer2.setProperty(div2,'innerHTML',this.verse);
                 this.renderer2.appendChild(this.divv,div2);
-                console.log('Divv:',this.divv);
             }
             else if((!this.choFlg) && (!this.verFlg))
             {
                 this.mdiv = this.renderer2.createElement('div');
                 this.renderer2.setProperty(this.mdiv,'innerHTML',this.verse);
                 this.renderer2.appendChild(this.misCe.nativeElement,this.mdiv);
-                console.log('why div:',this.mdiv);
             }
         }
         else //when line breaks are present
@@ -389,30 +351,22 @@ export class SongComponent implements OnInit,OnChanges {
         this.renderer2.appendChild(this.misCe.nativeElement,brk);
         }
     }//end of IF5 
-    console.log('Misce:',this.misCe.nativeElement);
-    console.log('MasARR weeeeeeeeeeeee:',this.masArr);
-    console.log('CHECK1 weeeeeeeeeeeee:',this.check1);
     this.check1 = this.masArr;
     // console.log('outputtest:',this.outputTest.nativeElement);
     } //end of for loop
-    console.log('Loop end');
   }//ngInit closure
 
   //function definitions
   storeMasChord(chordArr)
   {
-    console.log('storeMasChord weeeeeeeee');
     for( var i = 0 ;i<chordArr.length;i++)
     {
-        console.log('ADVAY chordArr:',chordArr[i]);
         this.masArr.push(chordArr[i]);
-        console.log('inside storemaschord:',this.masArr);
     }
     //Removing duplicates from the Array
     this.masArr = this.masArr.filter(function(elem, index, self) {
     return index == self.indexOf(elem);
     })
-    console.log('inside storemaschord after duplicate removal:',this.masArr);
   }
   metaForCheck(mdir:String,i)
   { 
@@ -422,11 +376,8 @@ export class SongComponent implements OnInit,OnChanges {
           case 'define':
               var chStr = this.inpArr[i].substring(this.inpArr[i].indexOf(":")+1,this.inpArr[i].lastIndexOf("}"));
               chStr = chStr.trim();
-              console.log('After trim:',chStr);
               chStr = chStr.replace(/  +/g, ' ');
-              console.log('After removing double whitespaces');
               this.chArr = chStr.split(' ');
-              console.log('Define split into arrays:',this.chArr);
               this.createChordDiagram(this.chArr);
               break;
           case 'title':
@@ -440,7 +391,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.mDirFlg = true;
               break;
           case 'subtitle':
@@ -452,7 +402,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.mDirFlg = true;
               break;
           case 'artist':
@@ -463,7 +412,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.mDirFlg = true;
               break;
           case 'composer':
@@ -474,7 +422,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.mDirFlg = true;
               break;
           case 'lyricist':
@@ -485,7 +432,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.mDirFlg = true;
               break;
           case 'copyright':
@@ -496,7 +442,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.mDirFlg = true;
               break;
           case 'album':
@@ -507,7 +452,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.mDirFlg = true;
               break;
           case 'year':
@@ -518,7 +462,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.mDirFlg = true;
               break;
           case 'key':
@@ -529,7 +472,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.mDirFlg = true;
               break;
           case 'time':
@@ -540,7 +482,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.mDirFlg = true;
               break;
           case 'tempo':
@@ -551,7 +492,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.mDirFlg = true;
               break;
           case 'duration':
@@ -562,7 +502,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.mDirFlg = true;
               break;
           case 'capo':
@@ -573,7 +512,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.mDirFlg = true;
               break;
           case 'comment':
@@ -585,7 +523,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.fDirFlg = true;
               break;
           case 'comment_italic':
@@ -597,7 +534,6 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.fDirFlg = true;
               break;
           case 'comment_box':
@@ -609,18 +545,14 @@ export class SongComponent implements OnInit,OnChanges {
               var div = this.renderer2.createElement('div');
               this.renderer2.appendChild(div,p);
               this.renderer2.appendChild(this.misCe.nativeElement,div);
-              console.log('div:',div);
               this.fDirFlg = true;
               break;
           case 'textfont':
               this.tFont = this.inpArr[i].substring(this.inpArr[i].indexOf(":")+1,this.inpArr[i].lastIndexOf("}"));
               this.textfont = `<div style=\"font-family:`+this.tFont+`;\">`;
-              console.log('textfont:',this.textfont);
               break;
           case 'textsize':
               this.tSize = this.inpArr[i].substring(this.inpArr[i].indexOf(":")+1,this.inpArr[i].lastIndexOf("}"));
-              console.log('textsize in %:',this.tSize+'%');
-              console.log('textsize in px:',this.tSize+'px');
               if(/^\s*?([0-9]*)\%/.test(this.tSize))
               {
                   this.tSize = this.tSize.replace("%",'');
@@ -636,19 +568,16 @@ export class SongComponent implements OnInit,OnChanges {
               }
           case 'textcolour':
               this.tColour = this.inpArr[i].substring(this.inpArr[i].indexOf(":")+1,this.inpArr[i].lastIndexOf("}"));
-              console.log('textcolour:',this.tColour);
               this.textcolour = `<div style=\"color:`+this.tColour+`;\">`;
               break;
           case 'chordfont':
               this.chordfont = this.inpArr[i].substring(this.inpArr[i].indexOf(":")+1,this.inpArr[i].lastIndexOf("}"));
               this.cFlg = true;
               this.chordfont = `<span style=\"font-family:`+this.chordfont+`;\">`;
-              console.log('chordfont:',this.chordfont);
               break;
           case 'chordsize':
               this.chordsize = this.inpArr[i].substring(this.inpArr[i].indexOf(":")+1,this.inpArr[i].lastIndexOf("}"));
               this.cFlg = true;
-              console.log('chordsize:',this.chordsize);
               if(/^\s*?([0-9]*)\%/.test(this.chordsize))
               {
                   this.chordsize = this.chordsize.replace("%",'');
@@ -659,25 +588,21 @@ export class SongComponent implements OnInit,OnChanges {
               {
                   this.chordsize = this.chordsize.concat('px');
                   this.chordsize = `<span style=\"font-size:`+this.chordsize+`;display:block;\">`;
-                  console.log('chordsize:',this.chordsize);
                   break;
               }
           case 'chordcolour':
               this.chordcolour = this.inpArr[i].substring(this.inpArr[i].indexOf(":")+1,this.inpArr[i].lastIndexOf("}"));
               this.cFlg = true;
-              console.log('chordcolour:',this.chordcolour);
               this.chordcolour = `<span class=\"colorc\" style=\"color:`+this.chordcolour+`;display:block;\">`;
               break;
           case 'tabfont':
               this.tabfont = this.inpArr[i].substring(this.inpArr[i].indexOf(":")+1,this.inpArr[i].lastIndexOf("}"));
               this.tFlg = true;
               this.tabfont = `<span style=\"font-family:`+this.tabfont+`;\">`;
-              console.log('tabfont:',this.tabfont);
               break;
           case 'tabsize':
               this.tabsize = this.inpArr[i].substring(this.inpArr[i].indexOf(":")+1,this.inpArr[i].lastIndexOf("}"));
               this.tFlg = true;
-              console.log('tabsize:',this.tabsize);
               if(/^\s*?([0-9]*)\%/.test(this.tabsize))
               {
                   this.tabsize = this.tabsize.replace("%",'');
@@ -688,13 +613,11 @@ export class SongComponent implements OnInit,OnChanges {
               {
                   this.tabsize = this.tabsize.concat('px');
                   this.tabsize = `<span style=\"font-size:`+this.tabsize+`;display:block;\">`;
-                  console.log('tabsize:',this.tabsize);
                   break;
               }
           case 'tabcolour':
               this.tabcolour = this.inpArr[i].substring(this.inpArr[i].indexOf(":")+1,this.inpArr[i].lastIndexOf("}"));
               this.tFlg = true;
-              console.log('tabcolour:',this.tabcolour);
               this.tabcolour = `<span style=\"color:`+this.tabcolour+`;display:block;\">`;
               break;
          }//end of switch
@@ -727,7 +650,6 @@ export class SongComponent implements OnInit,OnChanges {
               this.renderer2.appendChild(this.divv,p);
             //   this.renderer2.appendChild(this.outputTest.nativeElement,this.divv);
               this.renderer2.appendChild(this.misCe.nativeElement,this.divv);
-              console.log('Counter:',this.counter);
               this.counter++;
               break;
          case 'end_of_verse':
@@ -754,7 +676,6 @@ export class SongComponent implements OnInit,OnChanges {
     createChordDiagram(diArr:any)
     {
         this.digArr = diArr;
-        console.log('Array received from function call:',this.digArr);
         this.dFormat.label = this.digArr[0];
         this.dFormat.base_fret = this.digArr[2];
         this.dFormat.frp1 = this.digArr[4];
@@ -765,7 +686,6 @@ export class SongComponent implements OnInit,OnChanges {
         this.dFormat.frp6 = this.digArr[9];
         if(this.digArr[10]==="fingers")
         {
-            console.log('fingers set');
             this.dFormat.finp1 = this.digArr[11];
             this.dFormat.finp2 = this.digArr[12];
             this.dFormat.finp3 = this.digArr[13];
@@ -786,7 +706,6 @@ export class SongComponent implements OnInit,OnChanges {
     createXChordString(frp1:any,frp2:any,frp3:any,frp4:any,frp5:any,frp6:any)
     {  
         console.log('Inside createXChordString');
-        console.log('Frets:',this.dFormat.frp1,this.dFormat.frp2,this.dFormat.frp3,this.dFormat.frp4,this.dFormat.frp5,this.dFormat.frp6)
         //acidjsxstring1
         switch(frp1)
         {
@@ -956,16 +875,14 @@ export class SongComponent implements OnInit,OnChanges {
         this.acidjsxchord = this.acidjsxchord+acidjsxstring+`</div>`;
         this.acidjsxchordDb = this.acidjsxchord;
         this.acidjsxchord = this.sanitizer.bypassSecurityTrustHtml(this.acidjsxchord);
-        console.log('HTML:',this.acidjsxchord);
+
     }
 
     putHref()
     {
       if(!this.hrefFlg)
       {
-        console.log('SC I am in here 2 puthref');
         var chordtags = document.getElementsByClassName("colorc");
-        console.log('chord:',chordtags);
         for(var i=0;i<chordtags.length;i++)
         {
          //this.renderer2.setStyle(chordtags[i],'color',this.cusForm.tabColor);
@@ -974,15 +891,10 @@ export class SongComponent implements OnInit,OnChanges {
           this.renderer2.setProperty(newSpan,'id','chover');
           this.renderer2.addClass(newSpan,'hoverc');
           this.renderer2.appendChild(chordtags[i],newSpan);
-          console.log('The chord from innerhtml of chord class:',chord);
           var insStr = `<ins class=\"scales_chords_api\" chord=\"`+chord+`\"></ins>`;
-          console.log('Innerhtml for ins:',insStr);
           this.renderer2.setProperty(newSpan,'innerHTML',insStr);
-          console.log('New Span:',newSpan);
         }
-        console.log('Final Misce:',this.misCe.nativeElement);
         this.hrefFlg = true;
-        console.log('Hrefflg:',this.hrefFlg);
       }
     }
 
@@ -993,10 +905,7 @@ export class SongComponent implements OnInit,OnChanges {
         var remColorc = document.getElementsByClassName("colorc");
         for(var i=0;i<remColorc.length;i++)
         {
-            console.log('Loop counter:',i);
             this.renderer2.removeChild(remColorc[i],remSpan[0]);
-            console.log('remColorc:',remColorc);
-            console.log('remSpan:',remSpan);
         }
 
     } 
@@ -1013,7 +922,6 @@ export class SongComponent implements OnInit,OnChanges {
         if(this.cusForm.tabColor)
         {  
             var tabtags = document.getElementsByClassName("tab");
-            console.log('tabtags:',tabtags);
             for(var i=0;i<tabtags.length;i++)
             {
                this.renderer2.setStyle(tabtags[i],'color',this.cusForm.tabColor);
@@ -1022,7 +930,6 @@ export class SongComponent implements OnInit,OnChanges {
         if(this.cusForm.tabFont)
         {
             var tabtags = document.getElementsByClassName("tab");
-            console.log('tabtags:',tabtags);
             for(var i=0;i<tabtags.length;i++)
             {
                this.renderer2.setStyle(tabtags[i],'font-family',this.cusForm.tabFont);
@@ -1031,7 +938,6 @@ export class SongComponent implements OnInit,OnChanges {
         if(this.cusForm.tabSize)
         {
             var tabtags = document.getElementsByClassName("tab");
-            console.log('tabtags:',tabtags);
             for(var i=0;i<tabtags.length;i++)
             {
                this.renderer2.setStyle(tabtags[i],'font-size',this.cusForm.tabSize+`px`);
@@ -1040,7 +946,6 @@ export class SongComponent implements OnInit,OnChanges {
         if(this.cusForm.textFont)
         {
             var versetags = document.getElementsByClassName("masTxt");
-            console.log('Verse:',versetags);
             for(var i=0;i<versetags.length;i++)
             {
                this.renderer2.setStyle(versetags[i],'font-family',this.cusForm.textFont);
@@ -1049,7 +954,6 @@ export class SongComponent implements OnInit,OnChanges {
        if(this.cusForm.textColor)
         {
             var versetags = document.getElementsByClassName("masTxt")
-            console.log('Verse:',versetags);
             for(var i=0;i<versetags.length;i++)
             {
                this.renderer2.setStyle(versetags[i],'color',this.cusForm.textColor);
@@ -1058,7 +962,6 @@ export class SongComponent implements OnInit,OnChanges {
        if(this.cusForm.textSize)
         {
             var versetags = document.getElementsByClassName("masTxt")
-            console.log('Verse:',versetags);
             for(var i=0;i<versetags.length;i++)
             {
                this.renderer2.setStyle(versetags[i],'font-size',this.cusForm.textSize+`px`);
@@ -1067,7 +970,6 @@ export class SongComponent implements OnInit,OnChanges {
         if(this.cusForm.chordColor)
         {
             var spantags = document.getElementsByClassName("chord")
-            console.log('Chord ID:',spantags);
             for(var i=0;i<spantags.length;i++)
             {
                this.renderer2.setStyle(spantags[i],'color',this.cusForm.chordColor);
@@ -1077,7 +979,6 @@ export class SongComponent implements OnInit,OnChanges {
         if(this.cusForm.chordFont)
         {
             var spantags = document.getElementsByClassName("chord")
-            console.log('Chord ID:',spantags);
             for(var i=0;i<spantags.length;i++)
             {
                this.renderer2.setStyle(spantags[i],'font-family',this.cusForm.chordFont);
@@ -1086,7 +987,6 @@ export class SongComponent implements OnInit,OnChanges {
         if(this.cusForm.chordSize)
         {
             var spantags = document.getElementsByClassName("chord")
-            console.log('Chord ID:',spantags);
             for(var i=0;i<spantags.length;i++)
             {
                this.renderer2.setStyle(spantags[i],'font-size',this.cusForm.chordSize+`px`);
@@ -1095,7 +995,6 @@ export class SongComponent implements OnInit,OnChanges {
         if(this.cusForm.metaColor)
         {
             var ptags = document.getElementsByClassName("centercls")
-            console.log('Div:',ptags);
             for(var i=0;i<ptags.length;i++)
             {
                this.renderer2.setStyle(ptags[i],'color',this.cusForm.metaColor);
@@ -1105,7 +1004,6 @@ export class SongComponent implements OnInit,OnChanges {
         if(this.cusForm.metaFont)
         {
             var ptags = document.getElementsByClassName("centercls")
-            console.log('Div:',ptags);
             for(var i=0;i<ptags.length;i++)
             {
                this.renderer2.setStyle(ptags[i],'font-family',this.cusForm.metaFont);
@@ -1114,7 +1012,6 @@ export class SongComponent implements OnInit,OnChanges {
         if(this.cusForm.metaSize)
         {
             var ptags = document.getElementsByClassName("centercls")
-            console.log('Div:',ptags);
             for(var i=0;i<ptags.length;i++)
             {
                this.renderer2.setStyle(ptags[i],'font-size',this.cusForm.metaSize+`px`);

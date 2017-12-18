@@ -49,19 +49,14 @@ export class PlaylistComponent implements OnInit,OnChanges {
       console.log('changed things:',changes);
       if(this.succ)
       {
-        console.log('Inside successflg');
         var rb1 = document.getElementById("rb1");
-        console.log('RB1:',rb1);
         if(rb1)
         {
-           console.log('Checked false for rb1');
            this.renderer2.setProperty(rb1,'checked',false);
         }
         var rb2 = document.getElementById("rb2");
-        console.log('RB1:',rb1);
         if(rb2)
         {
-          console.log('Checked false for rb2');
           this.renderer2.setProperty(rb2,'checked',false);
         }  
         this.testFlg = false;
@@ -118,8 +113,6 @@ export class PlaylistComponent implements OnInit,OnChanges {
       this.playSer.fetchallPlists(this.auth.userProfile.email).subscribe(
         data => {
             this.pldet = data;
-            console.log('Pldet:',this.pldet);
-            console.log('Check:',this.pldet[0].playlistName);
             for(var i=0;i<this.pldet.length;i++)
             {
               this.plNameArr.push(this.pldet[i].playlistName)
@@ -128,7 +121,6 @@ export class PlaylistComponent implements OnInit,OnChanges {
             this.plNameArr = this.plNameArr.filter(function(elem, index, self) {
                 return index == self.indexOf(elem);
             })
-            console.log("Plname array: ", this.plNameArr);
             if(this.plNameArr.length == 0)
             {
                 console.log()
@@ -140,14 +132,11 @@ export class PlaylistComponent implements OnInit,OnChanges {
 
   checkDuplicate()
   {
-    console.log('Check for duplicates');
-    console.log('ARRAY FROM PARENT:',this.plNameArri);
     if(this.plNameArri.length)
     {
       if(this.plNameArri.indexOf(this.plName) > -1)
       {
        this.errFlg = true;
-       console.log('Error Flag:',this.errFlg);
       }
       else
       {
@@ -188,18 +177,14 @@ export class PlaylistComponent implements OnInit,OnChanges {
      {
         for(var i=0;i<this.songArr.length;i++)
         {
-        console.log('Song being saved:',this.songArr[i]);
-        console.log('plNamesave name:',this.plNamesave);
         this.plNamesave = this.plNamesave.charAt(0).toUpperCase()+this.plNamesave.slice(1);
         const plist = new PlayList(this.auth.userProfile.email,this.plNamesave,this.songArr[i]);
         this.playSer.savePlayList(plist).subscribe(
           response => 
           {
               this.plRes = response;
-              console.log('Got Response after saving:',response);
           });
         }
-        console.log('Setting flags');
         this.testFlg = true;
         this.op1Flg = false;
         this.op2Flg = false;

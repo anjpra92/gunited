@@ -90,20 +90,16 @@ export class SongbookComponent implements OnInit {
   onConfirmation(sname,songid,i)
   {
       console.log('onConfirmation');
-      console.log('CHECK SONG ID:',songid);
       var n = i + 1;
       this.songId = songid;
-      console.log('SongID:',this.songId);
       this.toggleSName = sname;
       this.checkIndex = "object-"+n;
-      console.log('CHECK INDEX:',this.checkIndex);
   }
   
   onPlConfirm(i)
   {
     console.log('OnPlCONFIRM');
     var playListName = this.plNameArr[i];
-    console.log('PLAYLIST CHOSEN TO DELETE',playListName);
     this.toggleName = playListName;
     this.plCheckIndex = i+1;
   }
@@ -123,16 +119,13 @@ export class SongbookComponent implements OnInit {
   {
     var id;
     console.log('Inside navclick');
-    console.log('Saved Song DET:',this.savedSongs);
     for( var i=0;i<this.savedSongs.length;i++)
     {
       if(this.savedSongs[i].songName == songName)
       {
-        console.log('When it is equal');
         id = this.savedSongs[i]._id;
       }
     }
-    console.log('Song ID:',id);
     this.router.navigate(['/songview',id,'songbook']);
   }
 
@@ -140,7 +133,6 @@ export class SongbookComponent implements OnInit {
    onDelete(){
         
         console.log('ID value from html template in onDelete:',this.songId);
-        console.log('Inside Delete Call');
         this.songSer.delSong(this.songId).subscribe(
         response => {
         this.delRes = response;
@@ -176,7 +168,6 @@ export class SongbookComponent implements OnInit {
                 this.onPlayListSave();
             }
        }
-      console.log('Updated array:',this.savedSongs);
   }
   
   onSCancel(i)
@@ -192,7 +183,6 @@ export class SongbookComponent implements OnInit {
   onDeleteList()
   {
     console.log('Inside playlist delete');
-    console.log('toggleName:',this.toggleName);
     //Fetch all the group details
     this.grpSer.fetchGroupDetails(this.auth.userProfile.email).subscribe(
     data => {
@@ -233,7 +223,6 @@ export class SongbookComponent implements OnInit {
        {
             this.expandArr = [];
        }
-      console.log('Updated playlist array:',this.plNameArr);
   }
 
  // Maintain a list of checkbox id's that were selected
@@ -250,22 +239,17 @@ export class SongbookComponent implements OnInit {
 
         //Will have the object ids of the span tag having the songName
         this.checkBoxArr.push(str);
-        console.log('Checkbox Array Set Anjana:',this.checkBoxArr);
      }
      else
      {
          this.checkBoxArr.splice(this.checkBoxArr.indexOf(str),1);
-         console.log('Checkbox Array Popped:',this.checkBoxArr);
      }
-     console.log('Checkbox array in saveclick:',this.checkBoxArr);
      if(this.checkBoxArr.length == 0)
      {
-       console.log('Checkbox array is empty');
        this.chkboxFlg = false;
      }
      else
      {
-       console.log('Checkbox array is not empty');
        this.chkboxFlg = true;
      }
      //Keep the songnameArr updated if the playListFlg is set 
@@ -294,7 +278,6 @@ export class SongbookComponent implements OnInit {
   this.plNameArr = this.plNameArr.filter(function(elem, index, self) {
             return index == self.indexOf(elem);
   })
-  console.log('PLNAME ARRAY:',this.plNameArr);
  }
 
  cancelDiv()
@@ -318,34 +301,25 @@ export class SongbookComponent implements OnInit {
    console.log('Inside EXPANDLIST')
    if(this.expandArr.length)
    {
-       console.log('expandarr has content:',this.expandArr);
        var td = document.getElementById("tobject-"+this.expandArr[0]);
        this.renderer2.addClass(td,'hidden');
        var expButton = document.getElementById("eobject-"+this.expandArr[0]);
-       console.log('expbutton CHECK close:',expButton);
        this.renderer2.removeStyle(expButton,'display');
        var clsButton = document.getElementById("ccobject-"+this.expandArr[0]);
-       console.log('clsButton CHECK close:',clsButton);
        this.renderer2.setStyle(clsButton,'display','none');
        this.expandArr.splice(-1,1);
    }
    var n = i+1;
-   console.log('Table element clicked expand:',n);
-   console.log('Expand List:',playList);
     this.playser.fetchPlist(this.auth.userProfile.email,playList).subscribe(
           data => {
             this.plsongArr = data;
-            console.log('Response for fetching all songs corresponding to playlist name',this.plsongArr);
           });
     this.expFlg = true;
     var td = document.getElementById("tobject-"+n);
-    console.log('TD anj ELEMENT TO DISPLAY:',td);
     this.renderer2.removeClass(td,'hidden');
     var expButton = document.getElementById("eobject-"+n);
-    console.log('expbutton:',expButton);
     this.renderer2.setStyle(expButton,'display','none');
     var clsButton = document.getElementById("ccobject-"+n);
-    console.log('clsButton:',clsButton);
     this.renderer2.removeStyle(clsButton,'display');
     this.expandArr.push(n);
     //expandarr
@@ -354,23 +328,16 @@ export class SongbookComponent implements OnInit {
  closeList(i)
  {
    var n = i+1;
-   console.log('Table element clicked expand:',n);
-   console.log('inside closelist');
    this.expFlg = false;
    var td = document.getElementById("tobject-"+n);
-   console.log('TD CHECK ELEMENT TO hide:',td);
    this.renderer2.addClass(td,'hidden');
    var expButton = document.getElementById("eobject-"+n);
-   console.log('expbutton CHECK close:',expButton);
    this.renderer2.removeStyle(expButton,'display');
    var clsButton = document.getElementById("ccobject-"+n);
-   console.log('clsButton CHECK close:',clsButton);
    this.renderer2.setStyle(clsButton,'display','none');
    if(this.expandArr.length)
    {
-       console.log('Expand Arr has length');
        this.expandArr.splice(-1,1);
-       console.log('EXPANDARR in closelist:',this.expandArr);
    }
  }
  //todoo
@@ -391,7 +358,6 @@ export class SongbookComponent implements OnInit {
           break;
         }
     }
-    console.log('Updated song list:',this.plsongArr);
  }
 
  displayPlaylists()
@@ -399,7 +365,6 @@ export class SongbookComponent implements OnInit {
       this.playser.fetchallPlists(this.auth.userProfile.email).subscribe(
       data => {
         this.playListDet = data;
-        console.log('Pldet:',this.playListDet);
         for(var i=0;i<this.playListDet.length;i++)
         {
           this.plNameArr.push(this.playListDet[i].playlistName)
@@ -408,7 +373,6 @@ export class SongbookComponent implements OnInit {
         this.plNameArr = this.plNameArr.filter(function(elem, index, self) {
             return index == self.indexOf(elem);
         })
-        console.log("Plname array: ", this.plNameArr);
         if(this.plNameArr.length == 0)
         {
             this.noPlist = true;
@@ -420,16 +384,12 @@ export class SongbookComponent implements OnInit {
  {
    console.log('Onplaylist save')
    this.snameArr =[];
-   console.log('Check checkBoxarr:',this.checkBoxArr);
    for(var i=0;i<this.checkBoxArr.length;i++)
    {
      var span = document.getElementById(this.checkBoxArr[i]);
      var sname = span.innerHTML;
-     console.log('Song Name obtained:',sname);
      this.snameArr.push(sname);
    }
-   console.log('SongNameArray:',this.snameArr);
-   console.log('Playlistflg:',this.playListFlg);
    this.playListFlg = true;
    this.succFlg = true;
    this.changeTrigger++;
@@ -450,7 +410,6 @@ export class SongbookComponent implements OnInit {
  flgDisableSong(obj)
  {
     console.log('Flag Disable Song');
-    console.log('obj.val1:',obj.val1);
     if(obj.val1)
     {
       this.showGrpComp = false;

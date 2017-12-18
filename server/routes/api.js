@@ -34,7 +34,6 @@ router.get('/users',(req,res)=>
                };
       request(option, function (error, response, users) 
         {
-            console.log('Getting all the user details');
             if (error) throw new Error(error);
             res.send(users);
         });
@@ -145,7 +144,6 @@ router.post('/songBook', function (req, res, next)
           if (err)
             return console.log(err);
           else
-            console.log('Response obtained from db');
             res.send(result);
       })    
 });
@@ -168,7 +166,6 @@ router.get('/songBook/:user_email', function (req, res, next) {
 //Getting specific song from the database saved by the specific user
 router.get('/songBook/single/:id', function (req, res, next) {
     console.log('Inside getting single song');
-    console.log('ID:',req.params.id);
     SongBook.findById( req.params.id ,function(err,songdetail)
     {
         if(err)
@@ -208,7 +205,6 @@ router.post('/playList', function (req, res, next)
           if (err)
             return console.log(err);
           else
-            console.log('Response obtained from db');
             res.send(result);
       })    
 });
@@ -217,7 +213,6 @@ router.post('/playList', function (req, res, next)
 //Getting all the playlist names and associated songs with each name
 router.get('/playList/:user_email', function (req, res, next) {
     console.log('Inside getting playList');
-    console.log('Email:',req.params.user_email);
     PlayList.find({authEmail: req.params.user_email } ,function(err,listdetails)
     {
         if(err)
@@ -231,7 +226,6 @@ router.get('/playList/:user_email', function (req, res, next) {
 //Getting all the songs in the playlist name specified
 router.get('/playList/:user_email/:plname', function (req, res, next) {
     console.log('Inside getting playList');
-    console.log('Email:',req.params.user_email);
     PlayList.find({authEmail: req.params.user_email,playlistName:req.params.plname } ,function(err,listdetails)
     {
         if(err)
@@ -296,7 +290,6 @@ router.post('/group/newgroup', function (req, res, next)
           if (err)
             return console.log(err);
           else
-            console.log('Response obtained from db');
             res.send(result);
       })    
 });
@@ -317,7 +310,6 @@ router.post('/group/newgrouppl', function (req, res, next)
           if (err)
             return console.log(err);
           else
-            console.log('Response obtained from db');
             res.send(result);
       })    
 });
@@ -326,9 +318,6 @@ router.post('/group/newgrouppl', function (req, res, next)
 router.put('/group/updgroup/:auth_email/:g_name/:fr_email', function (req, res, next) 
 {
     console.log('Inside updating /updgroup');
-    console.log('Email:',req.params.auth_email);
-    console.log('Groupname:',req.params.g_name);
-    console.log('Friend Email:',req.params.fr_email);
     GroupList.findOneAndUpdate( {authEmail:req.params.auth_email, groupName:req.params.g_name}, {$push:{friendEmails:req.params.fr_email}}, {new: true} ,function(err,grpdetail)
     {
         if(err)
@@ -342,9 +331,6 @@ router.put('/group/updgroup/:auth_email/:g_name/:fr_email', function (req, res, 
 router.put('/group/updplgroup/:auth_email/:g_name/:plname', function (req, res, next) 
 {
     console.log('Inside updating /updplgroup');
-    console.log('Email:',req.params.auth_email);
-    console.log('Groupname:',req.params.g_name);
-    console.log('Playlist name:',req.params.plname);
     GroupList.findOneAndUpdate( {authEmail:req.params.auth_email, groupName:req.params.g_name}, {$push:{playListNames:req.params.plname}}, {new: true} ,function(err,grpdetail)
     {
         if(err)
@@ -358,9 +344,6 @@ router.put('/group/updplgroup/:auth_email/:g_name/:plname', function (req, res, 
 router.put('/group/delplgroup/:auth_email/:g_name/:plname', function (req, res, next) 
 {
     console.log('Inside updating /delplgroup');
-    console.log('Email:',req.params.auth_email);
-    console.log('Groupname:',req.params.g_name);
-    console.log('Playlist name:',req.params.plname);
     GroupList.findOneAndUpdate( {authEmail:req.params.auth_email, groupName:req.params.g_name}, {$pull:{playListNames:req.params.plname}}, {new: true} ,function(err,grpdetail)
     {
         if(err)
@@ -374,9 +357,6 @@ router.put('/group/delplgroup/:auth_email/:g_name/:plname', function (req, res, 
 router.put('/group/delfrgroup/:auth_email/:g_name/:femail', function (req, res, next) 
 {
     console.log('Inside updating /delfrgroup');
-    console.log('Email:',req.params.auth_email);
-    console.log('Groupname:',req.params.g_name);
-    console.log('Friend Email:',req.params.femail);
     GroupList.findOneAndUpdate( {authEmail:req.params.auth_email, groupName:req.params.g_name}, {$pull:{friendEmails:req.params.femail}}, {new: true} ,function(err,grpdetail)
     {
         if(err)
@@ -389,7 +369,6 @@ router.put('/group/delfrgroup/:auth_email/:g_name/:femail', function (req, res, 
 //Getting the Group Details for the current user
 router.get('/group/:user_email', function (req, res, next) {
     console.log('Inside getting groupdet');
-    console.log('Email:',req.params.user_email);
     GroupList.find({authEmail: req.params.user_email } ,function(err,grpdetails)
     {
         if(err)
@@ -403,7 +382,6 @@ router.get('/group/:user_email', function (req, res, next) {
 //Getting friend/playlist name details for given group name
 router.get('/group/getgroup/:email/:gname', function (req, res, next) {
     console.log('Inside getting getgroup');
-    console.log('gname:',req.params.gname);
     GroupList.find({authEmail:req.params.email,groupName: req.params.gname} ,function(err,grpdetails)
     {
         if(err)
